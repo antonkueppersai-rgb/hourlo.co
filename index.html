@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hourlo · Get your team's hours back</title>
+<meta name="description" content="Hourlo finds the office work that eats your team's week and automates the biggest time sink first. Time audit from €290, Berlin, in English, German and Russian.">
+<link rel="canonical" href="https://hourlo.co/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#2B59C3">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hourlo.co/">
+<meta property="og:title" content="Hourlo · Get your team's hours back">
+<meta property="og:description" content="One conversation finds the office work that eats your week. A two-page plan in hours and euros, then the first helper built in your own tools.">
+<meta property="og:image" content="https://hourlo.co/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Layout: one narrow column like a spec sheet; the offer and its price sit high, the process and rules follow, contact last. */
+:root {
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --ink: #12151B;
+  --muted: #5F6672;
+  --line: #E3E6EB;
+  --accent: #2B59C3;
+  --accent-soft: #E7EDFA;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0E1116; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-soft: #1B2740; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0E1116; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-soft: #1B2740; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 720px; margin: 0 auto; }
+h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; letter-spacing: -.02em; }
+p { margin: 0; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.label { font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+nav { display: flex; justify-content: space-between; align-items: center; padding-block: 20px; }
+.logo { color: var(--ink); line-height: 0; }
+.logo svg { height: 22px; width: auto; display: block; }
+.logo span { color: var(--accent); }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.lang button { font: 500 13px var(--mono); border: 0; background: transparent; color: var(--muted); padding: 6px 10px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+.hero { padding-block: 36px 28px; display: grid; gap: 16px; }
+.hero h1 { font-size: clamp(34px, 7vw, 52px); font-weight: 700; }
+.hero p { font-size: 18px; color: var(--muted); max-width: 60ch; }
+
+.offer { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 16px; }
+.offer .tag { display: inline-block; justify-self: start; background: var(--accent-soft); color: var(--accent); font: 500 12px var(--mono); padding: 4px 8px; border-radius: 6px; }
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.price { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 4px; align-content: start; }
+.price b { font: 600 28px/1.1 var(--sans); letter-spacing: -.02em; }
+.price small { color: var(--muted); font-size: 14px; }
+
+section { padding-block: 36px 0; display: grid; gap: 14px; }
+section h2 { font-size: 22px; font-weight: 600; }
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+ol.steps li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; counter-increment: s; }
+ol.steps li::before { content: counter(s, decimal-leading-zero); font: 500 13px/1.9 var(--mono); color: var(--accent); }
+ul.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+ul.list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; }
+ul.list li::before { content: "—"; color: var(--accent); font-family: var(--mono); }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; }
+.card h3 { font-size: 15px; font-weight: 600; }
+.card p, .card li { font-size: 15px; color: var(--muted); }
+
+.contact { background: var(--ink); color: var(--bg); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
+.contact .label { color: inherit; opacity: .7; }
+.row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.row .mono { font-size: 17px; }
+.copy { font: 500 12px var(--mono); border: 1px solid currentColor; background: transparent; color: inherit; border-radius: 6px; padding: 4px 8px; cursor: pointer; opacity: .85; }
+footer { padding-top: 28px; font-size: 13px; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[data-l] { display: none; }
+html[lang="en"] [data-l="en"], html[lang="de"] [data-l="de"] { display: revert; }
+html[lang="en"] .offer .tag[data-l="de"], html[lang="de"] .offer .tag[data-l="en"] { display: none; }
+@media (max-width: 560px) { .prices, .split { grid-template-columns: minmax(0, 1fr); } }
+.contact a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+footer a { color: inherit; }
+footer p + p { margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo" aria-label="Hourlo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 336 96"><path d="M5.0,9.0V95.0M5.0,70A25,25 0 0 1 55.0,70V95.0M76,70A25,25 0 1 1 126,70A25,25 0 1 1 76,70M147.0,45.0V70A25,25 0 0 0 197.0,70M197.0,45.0V95.0M218.0,95.0V45.0M218.0,70A25,25 0 0 1 243.0,45M260.0,9.0V95.0" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="306" cy="70" r="25" fill="none" stroke="currentColor" stroke-width="10"/><path d="M306,70V53.5A16.5,16.5 0 0 1 322.5,70Z" style="fill:var(--accent)"/></svg></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="l-en" aria-pressed="true">EN</button>
+      <button type="button" id="l-de" aria-pressed="false">DE</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="label" data-l="en">For small teams, 5 to 50 people</span>
+    <span class="label" data-l="de">Für Betriebe mit 5 bis 50 Leuten</span>
+    <h1 data-l="en">Get your team's hours back.</h1>
+    <h1 data-l="de">Holen Sie sich die Stunden Ihres Teams zurück.</h1>
+    <p data-l="en">One conversation finds the office work that eats your week: enquiries, quotes, appointments, orders, invoices. You get a two-page plan with the three biggest time savers in hours and euros, and I build the first one inside the tools you already use.</p>
+    <p data-l="de">Ein Gespräch zeigt, welche Büroarbeit Ihre Woche frisst: Anfragen, Angebote, Termine, Bestellungen, Rechnungen. Sie bekommen einen Plan auf zwei Seiten mit den drei größten Zeitfressern in Stunden und Euro, und den ersten Helfer richte ich Ihnen in Ihren eigenen Programmen ein.</p>
+  </header>
+
+  <div class="offer">
+    <span class="tag" data-l="en">Founding offer · first 3 teams · then €390, later €790</span>
+    <span class="tag" data-l="de">Gründungsangebot · die ersten 3 Betriebe · danach 390 €, später 790 €</span>
+    <div class="prices">
+      <div class="price">
+        <span class="label" data-l="en">Time audit</span><span class="label" data-l="de">Zeit-Check</span>
+        <b class="mono">€290 <span style="font-size:15px;font-weight:500;color:var(--muted)"><span data-l="en">instead of</span><span data-l="de">statt</span> <s>€790</s></span></b>
+        <small data-l="en">One-off. Fully credited against your first month if you continue.</small>
+        <small data-l="de">Einmalig. Machen Sie weiter, wird der Betrag voll mit dem ersten Monat verrechnet.</small>
+      </div>
+      <div class="price">
+        <span class="label" data-l="en">Monthly help</span><span class="label" data-l="de">Monatliche Begleitung</span>
+        <b class="mono">from €490<span style="font-size:15px;font-weight:500">/mo</span></b>
+        <small data-l="en">A new helper for one person every two weeks, built in your own accounts. Cancel any month, no minimum term for the first 3 teams.</small>
+        <small data-l="de">Alle zwei Wochen ein neuer Helfer für eine Person, in Ihren eigenen Konten. Monatlich kündbar, ohne Mindestlaufzeit für die ersten 3 Betriebe.</small>
+      </div>
+    </div>
+    <p data-l="en"><b>My promise.</b> The plan names three places where your team loses time right at the top, each backed by evidence from your own work, for example minutes per week we counted or measured. If it doesn't, you get the €290 back. If nothing is worth doing, I write that in the plan and you pay nothing. I don't promise a set saving; I promise a plan built on your numbers. The first helper runs within 14 days of your go-ahead, or the first month is free.</p>
+    <p data-l="de"><b>Meine Zusage.</b> Der Plan nennt gleich vorne drei Stellen, an denen bei Ihnen Zeit verloren geht, jede belegt mit Zahlen aus Ihrer eigenen Arbeit, zum Beispiel gezählten oder gemessenen Minuten pro Woche. Schafft er das nicht, bekommen Sie die 290 € zurück. Wenn sich bei Ihnen nichts lohnt, schreibe ich das in den Plan, und Sie zahlen nichts. Ich verspreche keine bestimmte Ersparnis. Ich verspreche einen Plan mit Ihren Zahlen. Der erste Helfer läuft 14 Tage nach Ihrer Freigabe, sonst ist der erste Monat gratis.</p>
+  </div>
+
+  <section>
+    <h2 data-l="en">Typical cases</h2><h2 data-l="de">Typische Fälle</h2>
+    <ul class="list">
+      <li><span data-l="en"><b>Event catering and restaurants:</b> reading party enquiries, asking for missing details, writing quotes, following up. The November and December enquiries are arriving now.</span><span data-l="de"><b>Event-Gastronomie und Catering:</b> Weihnachtsfeier-Anfragen lesen, nachfragen, Angebote schreiben, nachhalten. Die Anfragen für November und Dezember kommen genau jetzt.</span></li>
+      <li><span data-l="en"><b>Property management:</b> tenant emails and calls with the same questions every day, damage reports that are only complete after the third reminder.</span><span data-l="de"><b>Hausverwaltung:</b> Mieter-Mails und Anrufe mit denselben Fragen jeden Tag, Schadenmeldungen, die erst beim dritten Nachfragen vollständig sind.</span></li>
+      <li><span data-l="en"><b>Trades, moving, cleaning:</b> enquiries that need two phone calls before they become a quote, and jobs typed again for the invoice.</span><span data-l="de"><b>Handwerk, Umzug, Reinigung:</b> Anfragen, aus denen erst nach zwei Telefonaten ein Angebot wird. Ab Januar 2027 ändert sich außerdem bei Rechnungen einiges. Wie läuft das bei Ihnen heute?</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 data-l="en">How it works</h2><h2 data-l="de">So läuft es</h2>
+    <ol class="steps">
+      <li><span data-l="en"><b>15-minute intro, free.</b> Phone or video.</span><span data-l="de"><b>15 Minuten kennenlernen, kostenlos.</b> Am Telefon oder per Video.</span></li>
+      <li><span data-l="en"><b>A first look in writing, free, within 24 hours.</b> What I heard, where most of the time probably goes, and what the audit would check. If it fits, eight short questions to answer before the call.</span><span data-l="de"><b>Ihre erste Einschätzung, schriftlich, kostenlos, innerhalb von 24 Stunden.</b> Was ich gehört habe, wo vermutlich die meiste Zeit hängt und was ich im Zeit-Check prüfen würde. Wenn es passt, acht kurze Fragen vorab.</span></li>
+      <li><span data-l="en"><b>The audit call, 45 to 60 minutes.</b> You and up to two people from your team. We walk through real cases: the last enquiry, the last quote, the last rescheduled appointment. Before anything changes, we write down together, step by step, where the time goes. Recorded only if you agree. The invoice comes with the booking and is paid before the call.</span><span data-l="de"><b>Das Zeit-Check-Gespräch, 45 bis 60 Minuten.</b> Mit Ihnen und bis zu zwei Leuten aus dem Team. Wir gehen echte Fälle durch: die letzte Anfrage, das letzte Angebot, die letzte Terminänderung. Bevor irgendetwas geändert wird, schreiben wir gemeinsam Schritt für Schritt auf, wohin die Zeit geht. Aufgenommen wird nur, wenn Sie zustimmen. Die Rechnung kommt mit der Terminbestätigung und ist vor dem Gespräch fällig.</span></li>
+      <li><span data-l="en"><b>Your plan in 3 to 5 working days.</b> We go through it together in 30 minutes, on screen or in person.</span><span data-l="de"><b>Ihr Plan nach drei bis fünf Werktagen.</b> Wir gehen ihn in 30 Minuten gemeinsam durch, am Bildschirm oder bei Ihnen.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2 data-l="en">What you get</h2><h2 data-l="de">Was Sie bekommen</h2>
+    <ul class="list">
+      <li><span data-l="en">A task table: which task, who does it, how often, how long, and what it costs you a year</span><span data-l="de">Eine Übersicht: welche Aufgabe, wer sie macht, wie oft, wie lange und was sie im Jahr kostet</span></li>
+      <li><span data-l="en">The three biggest time savers, each with before and after, in hours and euros</span><span data-l="de">Die drei größten Zeitfresser, jeweils mit vorher und nachher, in Stunden und Euro</span></li>
+      <li><span data-l="en">An approval map: what may run on its own, what comes to you as a draft, what always stays with you</span><span data-l="de">Eine Freigabe-Liste: was darf von selbst laufen, was kommt als Entwurf, was bleibt immer bei Ihnen</span></li>
+      <li><span data-l="en">The first step, concrete: what, for whom, by when</span><span data-l="de">Den ersten Schritt, ganz konkret: was, für wen, bis wann</span></li>
+      <li><span data-l="en">An honest 90-day estimate. Estimates are labelled as estimates.</span><span data-l="de">Eine ehrliche Rechnung für 90 Tage. Schätzungen stehen als Schätzung da.</span></li>
+      <li><span data-l="en">Want to see one first? Ask for the sample plan (an invented catering firm, labelled as a sample).</span><span data-l="de">Vorher ansehen? Fragen Sie nach dem Beispiel-Plan (erfundener Catering-Betrieb, als Beispiel gekennzeichnet).</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="split">
+      <div class="card">
+        <h3 data-l="en">What I never do</h3><h3 data-l="de">Was ich nie mache</h3>
+        <ul class="list">
+          <li><span data-l="en">Send anything to your customers without your OK</span><span data-l="de">Etwas ohne Ihre Freigabe an Kunden schicken</span></li>
+          <li><span data-l="en">Touch your inbox without your written OK. The audit needs no logins at all</span><span data-l="de">Ohne schriftliches OK an Ihr Postfach gehen. Für den Zeit-Check brauche ich keine Zugänge</span></li>
+          <li><span data-l="en">Lock you in: everything runs in your accounts and you can switch any helper off</span><span data-l="de">Sie binden: alles läuft in Ihren Konten, jeden Helfer schalten Sie selbst ab</span></li>
+          <li><span data-l="en">Sell you new software on a hunch, or give tax or legal advice</span><span data-l="de">Neue Software auf Verdacht verkaufen oder Steuer- und Rechtsberatung geben</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-l="en">Who it's for</h3><h3 data-l="de">Für wen</h3>
+        <p data-l="en">Teams where enquiries, quotes, appointments, orders or invoices cross the desk every day: trades, property management, moving and cleaning, practices, event catering. Remote in English, German or Russian.</p>
+        <p data-l="de">Betriebe, in denen jeden Tag Anfragen, Angebote, Termine, Bestellungen oder Rechnungen über den Tisch gehen: Handwerk, Hausverwaltung, Umzug und Reinigung, Praxen, Event-Catering. Auch per Video, auf Deutsch, Englisch oder Russisch.</p>
+        <p data-l="en">Not for you if messages should go to customers unchecked, or you want ready-made industry software.</p>
+        <p data-l="de">Nicht das Richtige, wenn Nachrichten ungeprüft an Kunden gehen sollen oder Sie eine fertige Branchensoftware suchen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-l="en">Who's behind it</h2><h2 data-l="de">Wer dahintersteht</h2>
+    <p data-l="en">I'm Anton Küppers, based in Berlin-Schöneberg. I grew up across several countries and work in German, English and Russian. I build small AI helpers that take repeat office work off people, for example a tool that turns a messy catering order email thread into a one-page brief with every detail and its source, plus a draft reply the owner checks before sending.</p>
+    <p data-l="de">Ich bin Anton Küppers aus Berlin-Schöneberg. Aufgewachsen bin ich in mehreren Ländern, ich arbeite auf Deutsch, Englisch und Russisch. Ich baue kleine Helfer mit KI, die Menschen wiederkehrende Büroarbeit abnehmen, zum Beispiel ein Werkzeug, das aus einem unübersichtlichen E-Mail-Verlauf zu einer Catering-Bestellung eine Seite macht: alle Eckdaten mit Quelle und ein Antwortentwurf, den die Inhaberin vor dem Senden prüft.</p>
+  </section>
+
+  <section>
+    <div class="contact">
+      <span class="label" data-l="en">Book the free 15 minutes</span><span class="label" data-l="de">15 Minuten kostenlos kennenlernen</span>
+      <div class="row"><a class="mono" id="phone" href="https://wa.me/4915229325796">+49 152 2932 5796</a><span class="label" style="opacity:.7">WhatsApp</span><button class="copy" type="button" data-copy="phone">Copy</button></div>
+      <div class="row"><a class="mono" id="mail" href="mailto:anton@hourlo.co">anton@hourlo.co</a><button class="copy" type="button" data-copy="mail">Copy</button></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Hourlo, Anton Claudius Küppers · Rubensstraße 39, 12159 Berlin · <span data-l="en">Small business under § 19 UStG, no VAT charged. Prices are final.</span><span data-l="de">Kleinunternehmer nach § 19 UStG, es wird keine Umsatzsteuer berechnet. Alle Preise sind Endpreise.</span></p>
+    <p><a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function set(l) {
+    root.lang = l;
+    document.getElementById('l-en').setAttribute('aria-pressed', l === 'en');
+    document.getElementById('l-de').setAttribute('aria-pressed', l === 'de');
+  }
+  var start = 'en';
+  if ((navigator.language || '').slice(0, 2) === 'de') start = 'de';
+  set(start);
+  document.getElementById('l-en').addEventListener('click', function () { set('en'); });
+  document.getElementById('l-de').addEventListener('click', function () { set('de'); });
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = document.getElementById(b.getAttribute('data-copy')).textContent;
+      var done = function () { b.textContent = '✓'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); };
+      if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () { window.getSelection().selectAllChildren(document.getElementById(b.getAttribute('data-copy'))); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
