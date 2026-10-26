@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample plan · Hourlo</title>
+<meta name="description" content="A sample Hourlo time audit plan for an invented property management firm: task table, the three biggest time savers, approval map, first step and a 90-day estimate.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+/* Layout: two A4 sheets, shown as paper on screen and printed edge to edge. Rules: DESIGN.md (direction A). */
+@font-face { font-family: "Geist"; src: url("/fonts/Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+:root { --bg: #EEF0F3; --paper: #FFFFFF; --band: #F6F7F9; --ink: #12151B; --muted: #5F6672; --line: #E3E6EB; --accent: #2B59C3; --accent-soft: #E7EDFA; --ok: #1F7A4D; --r: 10px;
+  --sans: "Geist", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; --mono: "Geist Mono", ui-monospace, Menlo, monospace; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 13px/1.5 var(--sans); padding: 24px 16px 64px; -webkit-font-smoothing: antialiased; }
+html[lang="en"] [data-l="de"], html[lang="de"] [data-l="en"] { display: none !important; }
+.tools { max-width: 210mm; margin: 0 auto 16px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; }
+.tools a { color: var(--accent); }
+.lang { display: flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--paper); }
+.lang button { font: 500 12px var(--mono); border: 0; background: transparent; color: var(--muted); padding: 7px 9px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.page { width: 210mm; max-width: 100%; min-height: 297mm; margin: 0 auto 20px; background: var(--paper); padding: 16mm 16mm 14mm; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 10px 30px -18px rgba(18,21,27,.4); border-radius: 4px; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.head svg { height: 16px; width: auto; display: block; }
+.label { font: 500 10.5px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: 26px; line-height: 1.1; letter-spacing: -.03em; margin: 0; font-weight: 600; }
+h2 { font-size: 15px; letter-spacing: -.01em; margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.stamp { background: var(--accent-soft); color: var(--accent); font: 500 11px var(--mono); padding: 6px 10px; border-radius: var(--r); }
+.summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.kpi { background: var(--band); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 2px; }
+.kpi b { font: 600 22px var(--mono); font-variant-numeric: tabular-nums; }
+.kpi b.ok { color: var(--ok); }
+.kpi > span { color: var(--muted); font-size: 12px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 10px var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.sum td { font-weight: 600; border-bottom: 0; }
+td small { color: var(--muted); display: block; font-size: 11px; }
+.saver { display: grid; grid-template-columns: 26px minmax(0, 1fr) 120px; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.saver .no { font: 500 13px var(--mono); color: var(--accent); }
+.saver b { font-size: 14px; }
+.saver p { color: var(--muted); margin-top: 3px; }
+.saver .ba { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.saver .ba s { color: var(--muted); }
+.saver .ba strong { color: var(--ok); display: block; font-size: 12px; font-weight: 500; }
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.box { border: 1px solid var(--line); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; align-content: start; }
+.box ul { margin: 0; padding-left: 16px; color: var(--muted); display: grid; gap: 3px; }
+.box .label { color: var(--accent); }
+.first { background: var(--band); border-radius: var(--r); padding: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.first div { display: grid; gap: 2px; }
+.first span { color: var(--muted); font-size: 12px; }
+.note { color: var(--muted); font-size: 11.5px; }
+.foot { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 10.5px; }
+@media screen and (max-width: 760px) {
+  .page { padding: 20px 16px; min-height: 0; }
+  .summary, .cols3, .first { grid-template-columns: minmax(0, 1fr); }
+  .saver { grid-template-columns: 22px minmax(0, 1fr); }
+  .saver .ba { grid-column: 2; text-align: left; }
+  .tblwrap { overflow-x: auto; }
+  .tblwrap table { min-width: 520px; }
+}
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; padding: 0; }
+  .tools { display: none; }
+  .page { box-shadow: none; border-radius: 0; margin: 0; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; break-after: page; }
+  .page:last-of-type { page-break-after: auto; break-after: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="tools">
+  <a href="/"><span data-l="en">← Back to hourlo.co</span><span data-l="de">← Zurück zu hourlo.co</span></a>
+  <span><a data-l="en" href="/sample-plan-en.pdf">Download PDF</a><a data-l="de" href="/sample-plan-de.pdf">Als PDF laden</a></span>
+  <div class="lang" role="group" aria-label="Language"><button type="button" id="l-de" aria-pressed="false">DE</button><button type="button" id="l-en" aria-pressed="true">EN</button></div>
+</div>
+
+<!-- PAGE 1 -->
+<article class="page">
+  <div class="head">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 336 96" aria-label="Hourlo"><path d="M5.0,9.0V95.0M5.0,70A25,25 0 0 1 55.0,70V95.0M76,70A25,25 0 1 1 126,70A25,25 0 1 1 76,70M147.0,45.0V70A25,25 0 0 0 197.0,70M197.0,45.0V95.0M218.0,95.0V45.0M218.0,70A25,25 0 0 1 243.0,45M260.0,9.0V95.0" fill="none" stroke="#12151B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="306" cy="70" r="25" fill="none" stroke="#12151B" stroke-width="10"/><path d="M306,70V53.5A16.5,16.5 0 0 1 322.5,70Z" fill="#2B59C3"/></svg>
+    <span class="stamp" data-l="en">SAMPLE · invented company</span><span class="stamp" data-l="de">BEISPIEL · erfundener Betrieb</span>
+  </div>
+
+  <div>
+    <span class="label" data-l="en">Time audit · plan · page 1 of 2</span><span class="label" data-l="de">Zeit-Check · Plan · Seite 1 von 2</span>
+    <h1 data-l="en">Muster Hausverwaltung: where the week goes</h1>
+    <h1 data-l="de">Muster Hausverwaltung: wohin die Woche geht</h1>
+    <p class="note" style="margin-top:6px" data-l="en">Property management, Berlin, 9 people, about 1,400 units. Audit call with the owner and two office staff. Counted over two weeks.</p>
+    <p class="note" style="margin-top:6px" data-l="de">Hausverwaltung, Berlin, 9 Leute, rund 1.400 Einheiten. Zeit-Check-Gespräch mit dem Inhaber und zwei Leuten aus dem Büro. Gezählt über zwei Wochen.</p>
+  </div>
+
+  <div class="summary">
+    <div class="kpi"><b><span data-n="15" data-d="1">15.0</span> <span data-l="en">h</span><span data-l="de">Std.</span></b><span data-l="en">repeat office work per week</span><span data-l="de">wiederkehrende Büroarbeit pro Woche</span></div>
+    <div class="kpi"><b><span data-l="en">€27,600</span><span data-l="de">27.600 €</span></b><span data-l="en">what it costs a year</span><span data-l="de">Kosten im Jahr</span></div>
+    <div class="kpi"><b class="ok">−<span data-n="9.5" data-d="1">9.5</span> <span data-l="en">h</span><span data-l="de">Std.</span></b><span data-l="en">per week with the top three helpers (estimate)</span><span data-l="de">pro Woche mit den drei Helfern (Schätzung)</span></div>
+  </div>
+
+  <section>
+    <h2 data-l="en">1 · Task table</h2><h2 data-l="de">1 · Aufgabenliste</h2>
+    <div class="tblwrap"><table>
+      <thead><tr><th data-l="en">Task</th><th data-l="de">Aufgabe</th><th data-l="en">Who</th><th data-l="de">Wer</th><th data-l="en">What we counted</th><th data-l="de">Was wir gezählt haben</th><th class="n" data-l="en">h/wk</th><th class="n" data-l="de">Std./Wo.</th><th class="n" data-l="en">€/year</th><th class="n" data-l="de">€/Jahr</th></tr></thead>
+      <tbody>
+        <tr><td data-l="en">Answering tenant questions by email</td><td data-l="de">Mieterfragen per Mail beantworten</td><td data-l="en">Office, 2 people</td><td data-l="de">Büro, 2 Leute</td><td data-l="en">112 emails in 2 weeks, 6.5 min each</td><td data-l="de">112 Mails in 2 Wochen, je 6,5 Min.</td><td class="n" data-n="6" data-d="1">6.0</td><td class="n" data-n="11040">11,040</td></tr>
+        <tr><td data-l="en">Chasing incomplete damage reports</td><td data-l="de">Unvollständigen Schadenmeldungen nachfassen</td><td data-l="en">Office</td><td data-l="de">Büro</td><td data-l="en">18 reports, 3 follow-ups each, 10 min per follow-up</td><td data-l="de">18 Meldungen, je 3 Nachfragen à 10 Min.</td><td class="n" data-n="4.5" data-d="1">4.5</td><td class="n" data-n="8280">8,280</td></tr>
+        <tr><td data-l="en">Typing craftsman invoices into the software</td><td data-l="de">Handwerkerrechnungen in die Software tippen</td><td data-l="en">Accounts</td><td data-l="de">Buchhaltung</td><td data-l="en">41 invoices in 2 weeks, 9 min each</td><td data-l="de">41 Rechnungen in 2 Wochen, je 9 Min.</td><td class="n" data-n="3" data-d="1">3.0</td><td class="n" data-n="5520">5,520</td></tr>
+        <tr><td data-l="en">Arranging flat viewings</td><td data-l="de">Besichtigungstermine abstimmen</td><td data-l="en">Office</td><td data-l="de">Büro</td><td data-l="en">6 viewings, 4 calls or emails each</td><td data-l="de">6 Besichtigungen, je 4 Anrufe oder Mails</td><td class="n" data-n="1.5" data-d="1">1.5</td><td class="n" data-n="2760">2,760</td></tr>
+        <tr class="sum"><td data-l="en">Total</td><td data-l="de">Summe</td><td></td><td></td><td class="n" data-n="15" data-d="1">15.0</td><td class="n" data-n="27600">27,600</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin-top:6px" data-l="en">€40 per staff hour including employer costs, 46 working weeks. Your own figure goes in the real plan.</p>
+    <p class="note" style="margin-top:6px" data-l="de">40 € pro Arbeitsstunde inklusive Arbeitgeberkosten, 46 Arbeitswochen. Im echten Plan steht Ihr eigener Wert.</p>
+  </section>
+
+  <section>
+    <h2 data-l="en">2 · The three biggest time savers</h2><h2 data-l="de">2 · Die drei größten Zeitfresser</h2>
+    <div class="saver"><span class="no">01</span><div><b data-l="en">Tenant reply drafts</b><b data-l="de">Antwortentwürfe für Mieter</b><p data-l="en">A helper in Outlook reads each tenant email, finds the answer in your house rules and FAQ sheet, and leaves a draft. The office checks and sends.</p><p data-l="de">Ein Helfer in Outlook liest jede Mietermail, sucht die Antwort in Hausordnung und FAQ-Liste und legt einen Entwurf an. Das Büro prüft und sendet.</p></div><div class="ba"><s data-n="6" data-d="1">6.0</s> → <span data-n="2" data-d="1">2.0</span> <span data-l="en">h</span><span data-l="de">Std.</span><strong data-l="en">saves ~€7,360/yr</strong><strong data-l="de">spart ~7.360 €/Jahr</strong></div></div>
+    <div class="saver"><span class="no">02</span><div><b data-l="en">Damage report form</b><b data-l="de">Formular für Schadenmeldungen</b><p data-l="en">Tenants report through a short form: photo, where, since when. Incomplete reports get one automatic reminder. A draft job order for the craftsman is ready to approve.</p><p data-l="de">Mieter melden über ein kurzes Formular: Foto, wo, seit wann. Unvollständige Meldungen bekommen eine automatische Erinnerung. Ein Auftragsentwurf für den Handwerker liegt zur Freigabe bereit.</p></div><div class="ba"><s data-n="4.5" data-d="1">4.5</s> → <span data-n="1.5" data-d="1">1.5</span> <span data-l="en">h</span><span data-l="de">Std.</span><strong data-l="en">saves ~€5,520/yr</strong><strong data-l="de">spart ~5.520 €/Jahr</strong></div></div>
+    <div class="saver"><span class="no">03</span><div><b data-l="en">Invoice pre-fill</b><b data-l="de">Rechnungen vorausfüllen</b><p data-l="en">Incoming craftsman invoices (PDF) are read and the booking is pre-filled in the property software. Accounts approves each one.</p><p data-l="de">Eingehende Handwerkerrechnungen (PDF) werden ausgelesen und die Buchung in der Verwaltungssoftware vorausgefüllt. Die Buchhaltung gibt jede frei.</p></div><div class="ba"><s data-n="3" data-d="1">3.0</s> → <span data-n="0.5" data-d="1">0.5</span> <span data-l="en">h</span><span data-l="de">Std.</span><strong data-l="en">saves ~€4,600/yr</strong><strong data-l="de">spart ~4.600 €/Jahr</strong></div></div>
+  </section>
+
+  <div class="foot"><span>Hourlo · Anton Küppers · anton@hourlo.co</span><span data-l="en">Sample with invented figures</span><span data-l="de">Beispiel mit erfundenen Zahlen</span></div>
+</article>
+
+<!-- PAGE 2 -->
+<article class="page">
+  <div class="head">
+    <span class="label" data-l="en">Time audit · plan · page 2 of 2</span><span class="label" data-l="de">Zeit-Check · Plan · Seite 2 von 2</span>
+    <span class="stamp" data-l="en">SAMPLE · invented company</span><span class="stamp" data-l="de">BEISPIEL · erfundener Betrieb</span>
+  </div>
+
+  <section>
+    <h2 data-l="en">3 · Approval map</h2><h2 data-l="de">3 · Freigabe-Liste</h2>
+    <div class="cols3">
+      <div class="box"><span class="label" data-l="en">Runs on its own</span><span class="label" data-l="de">Läuft von selbst</span><ul data-l="en"><li>Reminder for an incomplete damage report</li><li>Sorting invoices into the right folder</li><li>Confirming that a message arrived</li></ul><ul data-l="de"><li>Erinnerung bei unvollständiger Schadenmeldung</li><li>Rechnungen in den richtigen Ordner sortieren</li><li>Eingangsbestätigung für Nachrichten</li></ul></div>
+      <div class="box"><span class="label" data-l="en">Comes to you as a draft</span><span class="label" data-l="de">Kommt als Entwurf</span><ul data-l="en"><li>Replies to tenants</li><li>Job orders to craftsmen</li><li>Invoice bookings</li></ul><ul data-l="de"><li>Antworten an Mieter</li><li>Aufträge an Handwerker</li><li>Rechnungsbuchungen</li></ul></div>
+      <div class="box"><span class="label" data-l="en">Always stays with you</span><span class="label" data-l="de">Bleibt immer bei Ihnen</span><ul data-l="en"><li>Rent changes and notices</li><li>Payments</li><li>Anything with a legal deadline</li></ul><ul data-l="de"><li>Mieterhöhungen und Kündigungen</li><li>Zahlungen</li><li>Alles mit gesetzlicher Frist</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-l="en">4 · First step</h2><h2 data-l="de">4 · Erster Schritt</h2>
+    <div class="first">
+      <div><span data-l="en">What</span><span data-l="de">Was</span><b data-l="en">Helper 01, tenant reply drafts</b><b data-l="de">Helfer 01, Antwortentwürfe</b></div>
+      <div><span data-l="en">For whom</span><span data-l="de">Für wen</span><b data-l="en">The two office staff, in Outlook</b><b data-l="de">Die zwei Leute im Büro, in Outlook</b></div>
+      <div><span data-l="en">By when</span><span data-l="de">Bis wann</span><b data-l="en">Running 14 days after your go</b><b data-l="de">Läuft 14 Tage nach Ihrer Freigabe</b></div>
+    </div>
+    <p class="note" style="margin-top:8px" data-l="en">Check after two weeks: how many drafts were sent unchanged, how many needed edits, and minutes per email compared with the 6.5 we counted.</p>
+    <p class="note" style="margin-top:8px" data-l="de">Prüfung nach zwei Wochen: wie viele Entwürfe unverändert rausgingen, wie viele bearbeitet wurden, und Minuten pro Mail im Vergleich zu den gezählten 6,5.</p>
+  </section>
+
+  <section>
+    <h2 data-l="en">5 · 90-day estimate</h2><h2 data-l="de">5 · Rechnung für 90 Tage</h2>
+    <div class="tblwrap"><table>
+      <thead><tr><th data-l="en">Month</th><th data-l="de">Monat</th><th data-l="en">Helper live</th><th data-l="de">Helfer läuft</th><th class="n" data-l="en">h/wk saved</th><th class="n" data-l="de">Std./Wo. gespart</th><th class="n" data-l="en">Cost</th><th class="n" data-l="de">Kosten</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td data-l="en">01 Tenant reply drafts</td><td data-l="de">01 Antwortentwürfe</td><td class="n" data-n="4" data-d="1">4.0</td><td class="n"><span data-l="en">€490 − €290 credited</span><span data-l="de">490 € − 290 € verrechnet</span></td></tr>
+        <tr><td>2</td><td data-l="en">+ 02 Damage report form</td><td data-l="de">+ 02 Schadenformular</td><td class="n" data-n="7" data-d="1">7.0</td><td class="n" data-l="en">€490</td><td class="n" data-l="de">490 €</td></tr>
+        <tr><td>3</td><td data-l="en">+ 03 Invoice pre-fill</td><td data-l="de">+ 03 Rechnungen vorausfüllen</td><td class="n" data-n="9.5" data-d="1">9.5</td><td class="n" data-l="en">€490</td><td class="n" data-l="de">490 €</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:10px" data-l="en">At full speed the three helpers free about <b class="mono">9.5 h</b> a week, worth about <b class="mono">€1,460</b> a month. After month 3 they keep running in your accounts whether or not you continue with monthly help.</p>
+    <p style="margin-top:10px" data-l="de">Bei voller Wirkung sparen die drei Helfer rund <b class="mono">9,5 Std.</b> pro Woche, das sind etwa <b class="mono">1.460 €</b> im Monat. Nach Monat 3 laufen sie in Ihren Konten weiter, ob Sie die Begleitung fortsetzen oder nicht.</p>
+    <p class="note" style="margin-top:6px" data-l="en">All savings are estimates. Each one is measured again two weeks after the helper goes live.</p>
+    <p class="note" style="margin-top:6px" data-l="de">Alle Einsparungen sind Schätzungen. Jede wird zwei Wochen nach dem Start des Helfers neu gemessen.</p>
+  </section>
+
+  <section>
+    <h2 data-l="en">6 · What this plan doesn't cover</h2><h2 data-l="de">6 · Was dieser Plan nicht abdeckt</h2>
+    <p class="note" data-l="en">No tax or legal advice. Rent changes, notices and payments stay with the office. Any helper that handles tenant data starts only after a data processing agreement (Art. 28 GDPR) is signed.</p>
+    <p class="note" data-l="de">Keine Steuer- oder Rechtsberatung. Mieterhöhungen, Kündigungen und Zahlungen bleiben im Büro. Jeder Helfer, der Mieterdaten verarbeitet, startet erst nach unterschriebenem AV-Vertrag (Art. 28 DSGVO).</p>
+  </section>
+
+  <div class="foot"><span>Hourlo · Anton Küppers · anton@hourlo.co · hourlo.co</span><span data-l="en">Sample with invented figures</span><span data-l="de">Beispiel mit erfundenen Zahlen</span></div>
+</article>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function num(n, d) { return n.toLocaleString(root.lang === 'de' ? 'de-DE' : 'en-GB', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function set(l) {
+    root.lang = l;
+    document.getElementById('l-en').setAttribute('aria-pressed', l === 'en');
+    document.getElementById('l-de').setAttribute('aria-pressed', l === 'de');
+    document.querySelectorAll('[data-n]').forEach(function (el) { el.textContent = num(+el.getAttribute('data-n'), +(el.getAttribute('data-d') || 0)); });
+  }
+  document.getElementById('l-en').addEventListener('click', function () { set('en'); });
+  document.getElementById('l-de').addEventListener('click', function () { set('de'); });
+  var q = (location.search.match(/lang=(de|en)/) || [])[1];
+  set(q || ((navigator.language || '').slice(0, 2) === 'de' ? 'de' : 'en'));
+})();
+</script>
+</body>
+</html>

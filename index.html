@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hourlo · Get your team's hours back</title>
-<meta name="description" content="Hourlo finds the office work that eats your team's week and automates the biggest time sink first. Time audit from €290, Berlin, in English, German and Russian.">
+<meta name="description" content="Hourlo finds the office work that eats your team's week and builds the first fix inside the tools you already use. Time audit €290, money back if the plan doesn't deliver. Berlin, in German, English and Russian.">
 <link rel="canonical" href="https://hourlo.co/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="theme-color" content="#2B59C3">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hourlo.co/">
@@ -17,209 +18,653 @@
 <meta property="og:image" content="https://hourlo.co/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <style>
-/* Layout: one narrow column like a spec sheet; the offer and its price sit high, the process and rules follow, contact last. */
+/* Layout: direction A "Stopwatch". A sticky bar, then full-width bands that alternate white and light grey; content sits in a 1120px column. Rules: outputs/ai-biz/hourlo/design-research/DESIGN.md */
+@font-face { font-family: "Geist"; src: url("/fonts/Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 :root {
-  --bg: #F6F7F9;
-  --surface: #FFFFFF;
-  --ink: #12151B;
-  --muted: #5F6672;
-  --line: #E3E6EB;
-  --accent: #2B59C3;
-  --accent-soft: #E7EDFA;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --bg: #FFFFFF; --band: #F6F7F9; --surface: #FFFFFF; --ink: #12151B; --muted: #5F6672; --line: #E3E6EB;
+  --accent: #2B59C3; --accent-ink: #FFFFFF; --accent-soft: #E7EDFA; --ok: #1F7A4D;
+  --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 10px; --gut: 24px;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg: #0E1116; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-soft: #1B2740; color-scheme: dark; }
+  :root:not([data-theme="light"]) { --bg: #0E1116; --band: #12161D; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-ink: #0E1116; --accent-soft: #1B2740; --ok: #5BC08F; color-scheme: dark; }
 }
-:root[data-theme="dark"] { --bg: #0E1116; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-soft: #1B2740; color-scheme: dark; }
+:root[data-theme="dark"] { --bg: #0E1116; --band: #12161D; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-ink: #0E1116; --accent-soft: #1B2740; --ok: #5BC08F; color-scheme: dark; }
+
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); padding-inline: 16px; padding-block: 0 64px; }
-.wrap { max-width: 720px; margin: 0 auto; }
-h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; letter-spacing: -.02em; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; line-height: 1.1; letter-spacing: -.03em; font-weight: 600; text-wrap: balance; }
 p { margin: 0; }
-.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+a { color: var(--accent); }
+.in { max-width: 1120px; margin: 0 auto; padding-left: max(var(--gut), env(safe-area-inset-left, 0px)); padding-right: max(var(--gut), env(safe-area-inset-right, 0px)); }
+.band { background: var(--band); }
+.sec { padding-block: 112px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 40px; max-width: 64ch; }
+.sec-head h2 { font-size: 32px; }
+.sec-head p { color: var(--muted); font-size: 18px; }
 .label { font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-
-nav { display: flex; justify-content: space-between; align-items: center; padding-block: 20px; }
-.logo { color: var(--ink); line-height: 0; }
-.logo svg { height: 22px; width: auto; display: block; }
-.logo span { color: var(--accent); }
-.lang { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.lang button { font: 500 13px var(--mono); border: 0; background: transparent; color: var(--muted); padding: 6px 10px; cursor: pointer; }
-.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-
-.hero { padding-block: 36px 28px; display: grid; gap: 16px; }
-.hero h1 { font-size: clamp(34px, 7vw, 52px); font-weight: 700; }
-.hero p { font-size: 18px; color: var(--muted); max-width: 60ch; }
-
-.offer { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 16px; }
-.offer .tag { display: inline-block; justify-self: start; background: var(--accent-soft); color: var(--accent); font: 500 12px var(--mono); padding: 4px 8px; border-radius: 6px; }
-.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.price { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 4px; align-content: start; }
-.price b { font: 600 28px/1.1 var(--sans); letter-spacing: -.02em; }
-.price small { color: var(--muted); font-size: 14px; }
-
-section { padding-block: 36px 0; display: grid; gap: 14px; }
-section h2 { font-size: 22px; font-weight: 600; }
-ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: s; }
-ol.steps li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; counter-increment: s; }
-ol.steps li::before { content: counter(s, decimal-leading-zero); font: 500 13px/1.9 var(--mono); color: var(--accent); }
-ul.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
-ul.list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; }
-ul.list li::before { content: "—"; color: var(--accent); font-family: var(--mono); }
-.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; }
-.card h3 { font-size: 15px; font-weight: 600; }
-.card p, .card li { font-size: 15px; color: var(--muted); }
-
-.contact { background: var(--ink); color: var(--bg); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
-.contact .label { color: inherit; opacity: .7; }
-.row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
-.row .mono { font-size: 17px; }
-.copy { font: 500 12px var(--mono); border: 1px solid currentColor; background: transparent; color: inherit; border-radius: 6px; padding: 4px 8px; cursor: pointer; opacity: .85; }
-footer { padding-top: 28px; font-size: 13px; color: var(--muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 500 15px/1 var(--sans); padding: 13px 18px; border-radius: var(--r); text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { border-color: var(--line); color: var(--ink); background: var(--surface); }
+.btn.ghost:hover { border-color: var(--muted); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-[data-l] { display: none; }
-html[lang="en"] [data-l="en"], html[lang="de"] [data-l="de"] { display: revert; }
-html[lang="en"] .offer .tag[data-l="de"], html[lang="de"] .offer .tag[data-l="en"] { display: none; }
-@media (max-width: 560px) { .prices, .split { grid-template-columns: minmax(0, 1fr); } }
-.contact a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+html[lang="en"] [data-l="de"], html[lang="de"] [data-l="en"] { display: none !important; }
+
+/* top bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 20; }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top .in { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+.logo { color: var(--ink); line-height: 0; display: block; }
+.logo svg { height: 20px; width: auto; display: block; }
+.top nav { display: flex; align-items: center; gap: 22px; font-size: 14px; }
+.top nav a.link { color: var(--muted); text-decoration: none; }
+.top nav a.link:hover { color: var(--ink); }
+.lang { display: flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.lang button { font: 500 12px var(--mono); border: 0; background: transparent; color: var(--muted); padding: 7px 9px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.top .btn { padding: 9px 13px; font-size: 14px; }
+
+/* hero */
+.hero { padding-block: 88px 112px; }
+.hero .in { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 56px; align-items: center; }
+.hero .eyebrow { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.hero h1 { font-size: clamp(40px, 6vw, 64px); letter-spacing: -.04em; line-height: 1.02; margin: 14px 0 20px; }
+.hero .lead { font-size: 18px; color: var(--muted); max-width: 46ch; }
+.ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.hero .fine { margin-top: 16px; font: 13px/1.5 var(--mono); color: var(--muted); }
+.plan { background: var(--band); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 14px; box-shadow: 0 24px 48px -28px rgba(18, 21, 27, .35); min-width: 0; }
+.plan .ph { display: flex; justify-content: space-between; gap: 12px; }
+.plan .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px dashed var(--line); font-size: 15px; }
+.plan .row b { font: 500 16px var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plan .tot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+.plan .tot b { font: 600 26px var(--mono); font-variant-numeric: tabular-nums; }
+.plan .euro { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
+.plan .euro b { font: 500 14px var(--mono); color: var(--ink); }
+.plan .ex { font: 11px/1.5 var(--mono); color: var(--muted); }
+
+/* problem + week */
+.week { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 18px; }
+.week-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.seg button { font: 500 13px var(--sans); border: 0; background: transparent; color: var(--muted); padding: 8px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.days { display: grid; gap: 8px; }
+.day { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; align-items: center; }
+.day > span { font: 500 12px var(--mono); color: var(--muted); }
+.cells { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cell { height: 22px; border-radius: 4px; background: var(--line); transition: background-color .35s ease; }
+.cell.empty { background: transparent; border: 1px dashed var(--line); }
+.week.after .cell.h { background: var(--accent); }
+.week-foot { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: baseline; font-size: 14px; color: var(--muted); }
+.week-foot b { font: 600 22px var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font: 12px var(--mono); color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.problem { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: start; }
+.pains { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.pains li { display: grid; gap: 2px; padding-left: 16px; border-left: 2px solid var(--line); }
+.pains li b { font-weight: 600; }
+.pains li span { color: var(--muted); font-size: 15px; }
+
+/* industries */
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.card h3 { font-size: 18px; letter-spacing: -.02em; }
+.card p, .card li { color: var(--muted); font-size: 15px; }
+.card .label { color: var(--accent); }
+
+/* what you get */
+.get { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: c; }
+.checks li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; counter-increment: c; }
+.checks li::before { content: counter(c, decimal-leading-zero); font: 500 13px/1.75 var(--mono); color: var(--accent); }
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 14px; font-size: 14px; }
+.doc .bar2 { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.doc table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.doc th, .doc td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); }
+.doc th { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.doc td.n { font-family: var(--mono); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.doc .tbl { overflow-x: auto; }
+
+/* calculator */
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.calc .inputs { padding: 28px; display: grid; gap: 22px; }
+.calc label { display: grid; gap: 8px; font-size: 15px; }
+.calc .lv { display: flex; justify-content: space-between; gap: 12px; }
+.calc .lv b { font: 500 15px var(--mono); }
+.calc input[type=range] { width: 100%; accent-color: var(--accent); }
+.calc .result { background: var(--ink); color: var(--bg); padding: 28px; display: grid; gap: 18px; align-content: center; }
+.calc .result .big { font: 600 clamp(36px, 5vw, 52px)/1 var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.calc .result p { opacity: .75; font-size: 15px; }
+.calc .result .hrs { font: 500 18px var(--mono); }
+
+/* steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 10px; align-content: start; }
+.steps .when { font: 500 12px var(--mono); color: var(--accent); }
+.steps b { font-size: 16px; line-height: 1.3; }
+.steps p { font-size: 14px; color: var(--muted); }
+
+/* prices */
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.price { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; display: grid; gap: 12px; align-content: start; }
+.price.main { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.price .amt { font: 600 40px/1 var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.price .amt small { font: 500 15px var(--sans); color: var(--muted); letter-spacing: 0; }
+.price .amt s { font-size: 18px; color: var(--muted); font-weight: 400; }
+.price p { color: var(--muted); font-size: 15px; }
+.tag { justify-self: start; background: var(--accent-soft); color: var(--accent); font: 500 12px var(--mono); padding: 5px 9px; border-radius: var(--r); }
+.promise { margin-top: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; }
+.promise h3 { font-size: 22px; }
+.promise p { color: var(--muted); }
+.promise p + p { margin-top: 10px; }
+
+/* phone add-on */
+.phone { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.wa { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 10px; max-width: 420px; justify-self: end; width: 100%; }
+.wa .msg { background: var(--band); border-radius: var(--r); padding: 14px; font-size: 14px; display: grid; gap: 4px; }
+.wa .msg b { font-weight: 600; }
+.wa .msg .meta { font: 11px var(--mono); color: var(--muted); }
+.wa .reply { justify-self: start; font: 500 13px var(--sans); color: var(--accent); border: 1px solid var(--line); border-radius: var(--r); padding: 7px 11px; }
+
+/* privacy */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+/* about */
+.about { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 48px; align-items: center; }
+.about img { width: 100%; max-width: 300px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r); display: block; background: var(--line); }
+.about .txt { display: grid; gap: 14px; max-width: 60ch; }
+.about .txt p { color: var(--muted); font-size: 17px; }
+.about .txt p:first-of-type { color: var(--ink); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.facts span { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: var(--r); padding: 5px 9px; color: var(--muted); }
+
+/* faq */
+.faq { display: grid; gap: 0; border-top: 1px solid var(--line); max-width: 820px; }
+.faq details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 20px/1 var(--mono); color: var(--muted); }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { color: var(--muted); margin-top: 10px; max-width: 70ch; }
+
+/* book */
+.book { background: var(--ink); color: var(--bg); border-radius: var(--r); padding: 48px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.book h2 { font-size: clamp(30px, 4vw, 42px); }
+.book p { opacity: .75; margin-top: 12px; }
+.book .pick { justify-content: center; padding: 16px 18px; font-size: 16px; }
+.book .note { font-size: 13px; margin: 8px 0 16px; opacity: .6; }
+.book .note a { color: inherit; }
+.contact { display: grid; gap: 12px; }
+.contact .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--bg) 22%, transparent); border-radius: var(--r); }
+.contact .row a { color: inherit; text-decoration: none; font: 500 17px var(--mono); }
+.contact .row .what { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; opacity: .6; flex: 1 0 auto; text-align: right; }
+.copy { font: 500 12px var(--mono); border: 1px solid currentColor; background: transparent; color: inherit; border-radius: var(--r); padding: 4px 8px; cursor: pointer; opacity: .8; }
+
+footer { padding-block: 40px 56px; font-size: 13px; color: var(--muted); }
+footer .in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
 footer a { color: inherit; }
-footer p + p { margin-top: 6px; }
+
+@media (max-width: 960px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .hero .in, .problem, .get, .calc, .phone, .book, .about { grid-template-columns: minmax(0, 1fr); }
+  .promise { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .wa { justify-self: start; }
+  .top nav a.link { display: none; }
+}
+@media (max-width: 600px) {
+  :root { --gut: 16px; }
+  .sec { padding-block: 72px; }
+  .hero { padding-block: 48px 72px; }
+  .grid3, .grid2, .prices, .steps { grid-template-columns: minmax(0, 1fr); }
+  .book { padding: 28px 20px; }
+  .top .btn .long { display: none; }
+  .contact .row .what { text-align: left; flex-basis: 100%; }
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <nav>
-    <div class="logo" aria-label="Hourlo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 336 96"><path d="M5.0,9.0V95.0M5.0,70A25,25 0 0 1 55.0,70V95.0M76,70A25,25 0 1 1 126,70A25,25 0 1 1 76,70M147.0,45.0V70A25,25 0 0 0 197.0,70M197.0,45.0V95.0M218.0,95.0V45.0M218.0,70A25,25 0 0 1 243.0,45M260.0,9.0V95.0" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="306" cy="70" r="25" fill="none" stroke="currentColor" stroke-width="10"/><path d="M306,70V53.5A16.5,16.5 0 0 1 322.5,70Z" style="fill:var(--accent)"/></svg></div>
-    <div class="lang" role="group" aria-label="Language">
-      <button type="button" id="l-en" aria-pressed="true">EN</button>
-      <button type="button" id="l-de" aria-pressed="false">DE</button>
-    </div>
-  </nav>
-
-  <header class="hero">
-    <span class="label" data-l="en">For small teams, 5 to 50 people</span>
-    <span class="label" data-l="de">Für Betriebe mit 5 bis 50 Leuten</span>
-    <h1 data-l="en">Get your team's hours back.</h1>
-    <h1 data-l="de">Holen Sie sich die Stunden Ihres Teams zurück.</h1>
-    <p data-l="en">One conversation finds the office work that eats your week: enquiries, quotes, appointments, orders, invoices. You get a two-page plan with the three biggest time savers in hours and euros, and I build the first one inside the tools you already use.</p>
-    <p data-l="de">Ein Gespräch zeigt, welche Büroarbeit Ihre Woche frisst: Anfragen, Angebote, Termine, Bestellungen, Rechnungen. Sie bekommen einen Plan auf zwei Seiten mit den drei größten Zeitfressern in Stunden und Euro, und den ersten Helfer richte ich Ihnen in Ihren eigenen Programmen ein.</p>
-  </header>
-
-  <div class="offer">
-    <span class="tag" data-l="en">Founding offer · first 3 teams · then €390, later €790</span>
-    <span class="tag" data-l="de">Gründungsangebot · die ersten 3 Betriebe · danach 390 €, später 790 €</span>
-    <div class="prices">
-      <div class="price">
-        <span class="label" data-l="en">Time audit</span><span class="label" data-l="de">Zeit-Check</span>
-        <b class="mono">€290 <span style="font-size:15px;font-weight:500;color:var(--muted)"><span data-l="en">instead of</span><span data-l="de">statt</span> <s>€790</s></span></b>
-        <small data-l="en">One-off. Fully credited against your first month if you continue.</small>
-        <small data-l="de">Einmalig. Machen Sie weiter, wird der Betrag voll mit dem ersten Monat verrechnet.</small>
+<header class="top">
+  <div class="in">
+    <a class="logo" href="/" aria-label="Hourlo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 336 96"><path d="M5.0,9.0V95.0M5.0,70A25,25 0 0 1 55.0,70V95.0M76,70A25,25 0 1 1 126,70A25,25 0 1 1 76,70M147.0,45.0V70A25,25 0 0 0 197.0,70M197.0,45.0V95.0M218.0,95.0V45.0M218.0,70A25,25 0 0 1 243.0,45M260.0,9.0V95.0" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="306" cy="70" r="25" fill="none" stroke="currentColor" stroke-width="10"/><path d="M306,70V53.5A16.5,16.5 0 0 1 322.5,70Z" style="fill:var(--accent)"/></svg></a>
+    <nav>
+      <a class="link" href="#how"><span data-l="en">How it works</span><span data-l="de">So läuft es</span></a>
+      <a class="link" href="#prices"><span data-l="en">Prices</span><span data-l="de">Preise</span></a>
+      <a class="link" href="#faq">FAQ</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="l-de" aria-pressed="false">DE</button>
+        <button type="button" id="l-en" aria-pressed="true">EN</button>
       </div>
-      <div class="price">
-        <span class="label" data-l="en">Monthly help</span><span class="label" data-l="de">Monatliche Begleitung</span>
-        <b class="mono">from €490<span style="font-size:15px;font-weight:500">/mo</span></b>
-        <small data-l="en">A new helper for one person every two weeks, built in your own accounts. Cancel any month, no minimum term for the first 3 teams.</small>
-        <small data-l="de">Alle zwei Wochen ein neuer Helfer für eine Person, in Ihren eigenen Konten. Monatlich kündbar, ohne Mindestlaufzeit für die ersten 3 Betriebe.</small>
-      </div>
-    </div>
-    <p data-l="en"><b>My promise.</b> The plan names three places where your team loses time right at the top, each backed by evidence from your own work, for example minutes per week we counted or measured. If it doesn't, you get the €290 back. If nothing is worth doing, I write that in the plan and you pay nothing. I don't promise a set saving; I promise a plan built on your numbers. The first helper runs within 14 days of your go-ahead, or the first month is free.</p>
-    <p data-l="de"><b>Meine Zusage.</b> Der Plan nennt gleich vorne drei Stellen, an denen bei Ihnen Zeit verloren geht, jede belegt mit Zahlen aus Ihrer eigenen Arbeit, zum Beispiel gezählten oder gemessenen Minuten pro Woche. Schafft er das nicht, bekommen Sie die 290 € zurück. Wenn sich bei Ihnen nichts lohnt, schreibe ich das in den Plan, und Sie zahlen nichts. Ich verspreche keine bestimmte Ersparnis. Ich verspreche einen Plan mit Ihren Zahlen. Der erste Helfer läuft 14 Tage nach Ihrer Freigabe, sonst ist der erste Monat gratis.</p>
+      <a class="btn primary" href="https://calendly.com/anton-hourlo/kennenlernen" target="_blank" rel="noopener"><span data-l="en">Book <span class="long">a free </span>15 min</span><span data-l="de"><span class="long">Kostenlos </span>15 Min.<span class="long"> buchen</span></span></a>
+    </nav>
   </div>
+</header>
 
-  <section>
-    <h2 data-l="en">Typical cases</h2><h2 data-l="de">Typische Fälle</h2>
-    <ul class="list">
-      <li><span data-l="en"><b>Event catering and restaurants:</b> reading party enquiries, asking for missing details, writing quotes, following up. The November and December enquiries are arriving now.</span><span data-l="de"><b>Event-Gastronomie und Catering:</b> Weihnachtsfeier-Anfragen lesen, nachfragen, Angebote schreiben, nachhalten. Die Anfragen für November und Dezember kommen genau jetzt.</span></li>
-      <li><span data-l="en"><b>Property management:</b> tenant emails and calls with the same questions every day, damage reports that are only complete after the third reminder.</span><span data-l="de"><b>Hausverwaltung:</b> Mieter-Mails und Anrufe mit denselben Fragen jeden Tag, Schadenmeldungen, die erst beim dritten Nachfragen vollständig sind.</span></li>
-      <li><span data-l="en"><b>Trades, moving, cleaning:</b> enquiries that need two phone calls before they become a quote, and jobs typed again for the invoice.</span><span data-l="de"><b>Handwerk, Umzug, Reinigung:</b> Anfragen, aus denen erst nach zwei Telefonaten ein Angebot wird. Ab Januar 2027 ändert sich außerdem bei Rechnungen einiges. Wie läuft das bei Ihnen heute?</span></li>
-    </ul>
-  </section>
+<main>
 
-  <section>
-    <h2 data-l="en">How it works</h2><h2 data-l="de">So läuft es</h2>
+<!-- HERO -->
+<section class="hero">
+  <div class="in">
+    <div>
+      <span class="eyebrow" data-l="en">For teams of 5 to 50 · Berlin and remote</span>
+      <span class="eyebrow" data-l="de">Für Betriebe mit 5 bis 50 Leuten · Berlin und per Video</span>
+      <h1 data-l="en">Get your team's hours back.</h1>
+      <h1 data-l="de">Holen Sie sich die Stunden Ihres Teams zurück.</h1>
+      <p class="lead" data-l="en">One conversation finds the office work that eats your week. You get a two-page plan in hours and euros, and I build the first fix inside the tools you already use.</p>
+      <p class="lead" data-l="de">Ein Gespräch zeigt, welche Büroarbeit Ihre Woche frisst. Sie bekommen einen Plan auf zwei Seiten, in Stunden und Euro, und den ersten Helfer richte ich in Ihren eigenen Programmen ein.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://calendly.com/anton-hourlo/kennenlernen" target="_blank" rel="noopener"><span data-l="en">Book the free 15 minutes</span><span data-l="de">15 Minuten kostenlos sprechen</span></a>
+        <a class="btn ghost" href="/sample-plan.html"><span data-l="en">See a sample plan</span><span data-l="de">Beispiel-Plan ansehen</span></a>
+      </div>
+      <p class="fine" data-l="en">Time audit €290 · money back if the plan doesn't deliver</p>
+      <p class="fine" data-l="de">Zeit-Check 290 € · Geld zurück, wenn der Plan nicht hält, was er verspricht</p>
+    </div>
+
+    <div class="plan" aria-label="Sample plan">
+      <div class="ph"><span class="label" data-l="en">Time audit · plan</span><span class="label" data-l="de">Zeit-Check · Plan</span><span class="label">1 / 2</span></div>
+      <div class="row"><span data-l="en">Same tenant questions by email</span><span data-l="de">Dieselben Mieterfragen per Mail</span><b><span class="count" data-to="6.0">6.0</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
+      <div class="row"><span data-l="en">Chasing incomplete damage reports</span><span data-l="de">Unvollständigen Schadenmeldungen hinterher</span><b><span class="count" data-to="4.5">4.5</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
+      <div class="row"><span data-l="en">Invoices typed in twice</span><span data-l="de">Rechnungen doppelt abgetippt</span><b><span class="count" data-to="3.0">3.0</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
+      <div class="tot"><span data-l="en">Found per week</span><span data-l="de">Gefunden pro Woche</span><b><span class="count" data-to="13.5">13.5</span> <span data-l="en">h</span><span data-l="de">Std.</span></b></div>
+      <div class="euro"><span data-l="en">What it costs a year at €40 an hour</span><span data-l="de">Kosten im Jahr bei 40 € pro Stunde</span><b>€24,840</b></div>
+      <span class="ex" data-l="en">Sample: an invented property management firm with 9 people</span>
+      <span class="ex" data-l="de">Beispiel: eine erfundene Hausverwaltung mit 9 Leuten</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM + WEEK -->
+<section class="sec band" id="problem">
+  <div class="in problem">
+    <div>
+      <div class="sec-head">
+        <span class="label" data-l="en">The problem</span><span class="label" data-l="de">Das Problem</span>
+        <h2 data-l="en">The work around the work.</h2>
+        <h2 data-l="de">Die Arbeit rund um die Arbeit.</h2>
+        <p data-l="en">Nobody hired your team to copy details from one email into another program. But that's where the hours go, a few minutes at a time.</p>
+        <p data-l="de">Niemand hat Ihr Team eingestellt, um Angaben aus einer Mail in ein anderes Programm zu kopieren. Trotzdem gehen genau dort die Stunden hin, ein paar Minuten nach den anderen.</p>
+      </div>
+      <ul class="pains">
+        <li><b data-l="en">Enquiries that need two calls before they become a quote</b><b data-l="de">Anfragen, aus denen erst nach zwei Telefonaten ein Angebot wird</b></li>
+        <li><b data-l="en">The same five questions, every day</b><b data-l="de">Dieselben fünf Fragen, jeden Tag</b><span data-l="en">Opening hours, prices, "is it ready yet?"</span><span data-l="de">Öffnungszeiten, Preise, „Ist es schon fertig?“</span></li>
+        <li><b data-l="en">Documents you have to ask for three times</b><b data-l="de">Unterlagen, nach denen Sie dreimal fragen müssen</b></li>
+        <li><b data-l="en">Jobs typed in again for the invoice</b><b data-l="de">Aufträge, die für die Rechnung noch einmal abgetippt werden</b></li>
+      </ul>
+    </div>
+
+    <div class="week" id="week">
+      <div class="week-top">
+        <span class="label" data-l="en">Office busywork in a sample week</span>
+        <span class="label" data-l="de">Büro-Kleinkram in einer Beispielwoche</span>
+        <div class="seg" role="group" aria-label="Week view">
+          <button type="button" id="w-before" aria-pressed="true"><span data-l="en">Today</span><span data-l="de">Heute</span></button>
+          <button type="button" id="w-after" aria-pressed="false"><span data-l="en">With helpers</span><span data-l="de">Mit Helfern</span></button>
+        </div>
+      </div>
+      <div class="days" id="days"></div>
+      <div class="legend">
+        <span><i style="background:var(--line)"></i><span data-l="en">Your team does it, 30 min each</span><span data-l="de">Macht Ihr Team, je 30 Min.</span></span>
+        <span><i style="background:var(--accent)"></i><span data-l="en">A helper does it, you check</span><span data-l="de">Macht ein Helfer, Sie prüfen</span></span>
+      </div>
+      <div class="week-foot">
+        <span data-l="en">Hours your team spends on it</span><span data-l="de">Stunden, die Ihr Team dafür braucht</span>
+        <b><span id="w-hours">13.5</span> <span data-l="en">h</span><span data-l="de">Std.</span></b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="sec" id="who">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">Who it's for</span><span class="label" data-l="de">Für wen</span>
+      <h2 data-l="en">Teams where paperwork crosses the desk every day.</h2>
+      <h2 data-l="de">Betriebe, in denen jeden Tag Papierkram über den Tisch geht.</h2>
+    </div>
+    <div class="grid3">
+      <div class="card"><span class="label" data-l="en">Tax advisers</span><span class="label" data-l="de">Steuerberatung</span><h3 data-l="en">Receipts that arrive late and in pieces</h3><h3 data-l="de">Belege, die spät und stückweise kommen</h3><p data-l="en">Reminders to clients, sorting what came in, the same questions in tax season.</p><p data-l="de">Erinnerungen an Mandanten, Eingänge sortieren, dieselben Fragen in der Saison.</p></div>
+      <div class="card"><span class="label" data-l="en">Law offices</span><span class="label" data-l="de">Kanzleien</span><h3 data-l="en">New cases that start with a messy email</h3><h3 data-l="de">Neue Mandate, die mit einer wirren Mail beginnen</h3><p data-l="en">Pulling out names and dates, asking for missing documents, keeping deadlines in view.</p><p data-l="de">Namen und Fristen herausziehen, fehlende Unterlagen anfordern, Termine im Blick behalten.</p></div>
+      <div class="card"><span class="label" data-l="en">Property management</span><span class="label" data-l="de">Hausverwaltung</span><h3 data-l="en">Tenants asking the same things</h3><h3 data-l="de">Mieter, die dasselbe fragen</h3><p data-l="en">Emails and calls on repeat, damage reports that are only complete after the third reminder.</p><p data-l="de">Mails und Anrufe in Dauerschleife, Schadenmeldungen, die erst beim dritten Nachfragen vollständig sind.</p></div>
+      <div class="card"><span class="label" data-l="en">Trades and workshops</span><span class="label" data-l="de">Handwerk und Werkstätten</span><h3 data-l="en">From enquiry to quote takes too long</h3><h3 data-l="de">Von der Anfrage zum Angebot dauert es zu lange</h3><p data-l="en">Photos, measurements and addresses scattered across WhatsApp, then typed again for the invoice.</p><p data-l="de">Fotos, Maße und Adressen verstreut über WhatsApp, dann für die Rechnung noch einmal abgetippt.</p></div>
+      <div class="card"><span class="label" data-l="en">Practices</span><span class="label" data-l="de">Praxen</span><h3 data-l="en">The phone rings during every appointment</h3><h3 data-l="de">Das Telefon klingelt in jedem Termin</h3><p data-l="en">Booking, moving and reminding, plus forms that come back half filled in.</p><p data-l="de">Termine vergeben, verschieben, erinnern, und Formulare, die halb ausgefüllt zurückkommen.</p></div>
+      <div class="card"><span class="label" data-l="en">Catering and events</span><span class="label" data-l="de">Catering und Events</span><h3 data-l="en">Party enquiries with half the details</h3><h3 data-l="de">Feier-Anfragen mit der Hälfte der Angaben</h3><p data-l="en">Asking for the missing ones, writing quotes, following up. The Christmas enquiries are arriving now.</p><p data-l="de">Nachfragen, Angebote schreiben, nachhalten. Die Weihnachtsanfragen kommen genau jetzt.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="sec band" id="plan">
+  <div class="in get">
+    <div>
+      <div class="sec-head">
+        <span class="label" data-l="en">What you get</span><span class="label" data-l="de">Was Sie bekommen</span>
+        <h2 data-l="en">A two-page plan built on your own numbers.</h2>
+        <h2 data-l="de">Ein Plan auf zwei Seiten, mit Ihren eigenen Zahlen.</h2>
+      </div>
+      <ol class="checks">
+        <li><span data-l="en">A task table: what, who, how often, how long, and what it costs you a year</span><span data-l="de">Eine Aufgabenliste: was, wer, wie oft, wie lange und was es im Jahr kostet</span></li>
+        <li><span data-l="en">The three biggest time savers, each with before and after in hours and euros</span><span data-l="de">Die drei größten Zeitfresser, jeweils vorher und nachher in Stunden und Euro</span></li>
+        <li><span data-l="en">An approval map: what may run on its own, what comes to you as a draft, what always stays with you</span><span data-l="de">Eine Freigabe-Liste: was von selbst laufen darf, was als Entwurf kommt, was immer bei Ihnen bleibt</span></li>
+        <li><span data-l="en">The first step: what, for whom, by when</span><span data-l="de">Den ersten Schritt: was, für wen, bis wann</span></li>
+        <li><span data-l="en">An honest 90-day estimate, with estimates marked as estimates</span><span data-l="de">Eine ehrliche Rechnung für 90 Tage, Schätzungen als Schätzung markiert</span></li>
+      </ol>
+      <div class="ctas"><a class="btn ghost" href="/sample-plan.html"><span data-l="en">Open the sample plan</span><span data-l="de">Beispiel-Plan öffnen</span></a></div>
+    </div>
+    <div class="doc" aria-label="Sample plan, page 1">
+      <div class="bar2"><span class="label" data-l="en">Sample · Muster Hausverwaltung</span><span class="label" data-l="de">Beispiel · Muster Hausverwaltung</span><span class="label">p. 1</span></div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th><span data-l="en">Task</span><span data-l="de">Aufgabe</span></th><th><span data-l="en">Who</span><span data-l="de">Wer</span></th><th style="text-align:right"><span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></th><th style="text-align:right"><span data-l="en">€/year</span><span data-l="de">€/Jahr</span></th></tr></thead>
+          <tbody>
+            <tr><td><span data-l="en">Tenant questions by email</span><span data-l="de">Mieterfragen per Mail</span></td><td><span data-l="en">Office</span><span data-l="de">Büro</span></td><td class="n" data-n="6" data-d="1">6.0</td><td class="n" data-n="11040">11,040</td></tr>
+            <tr><td><span data-l="en">Chasing damage reports</span><span data-l="de">Schadenmeldungen nachfassen</span></td><td><span data-l="en">Office</span><span data-l="de">Büro</span></td><td class="n" data-n="4.5" data-d="1">4.5</td><td class="n" data-n="8280">8,280</td></tr>
+            <tr><td><span data-l="en">Invoices typed twice</span><span data-l="de">Rechnungen doppelt tippen</span></td><td><span data-l="en">Accounts</span><span data-l="de">Buchhaltung</span></td><td class="n" data-n="3" data-d="1">3.0</td><td class="n" data-n="5520">5,520</td></tr>
+            <tr><td><span data-l="en">Viewing appointments</span><span data-l="de">Besichtigungstermine</span></td><td><span data-l="en">Office</span><span data-l="de">Büro</span></td><td class="n" data-n="1.5" data-d="1">1.5</td><td class="n" data-n="2760">2,760</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <span class="label" data-l="en">Invented example · €40 per staff hour · 46 working weeks</span>
+      <span class="label" data-l="de">Erfundenes Beispiel · 40 € pro Arbeitsstunde · 46 Arbeitswochen</span>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="sec" id="calc">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">Your numbers</span><span class="label" data-l="de">Ihre Zahlen</span>
+      <h2 data-l="en">What does busywork cost you?</h2>
+      <h2 data-l="de">Was kostet Sie der Kleinkram?</h2>
+      <p data-l="en">A rough guess before we talk. The audit replaces it with numbers we actually count.</p>
+      <p data-l="de">Eine grobe Schätzung vorab. Im Zeit-Check ersetzen wir sie durch Zahlen, die wir wirklich zählen.</p>
+    </div>
+    <div class="calc">
+      <div class="inputs">
+        <label for="c-people"><span class="lv"><span><span data-l="en">People doing office work</span><span data-l="de">Leute mit Büroarbeit</span></span><b id="o-people">8</b></span><input id="c-people" type="range" min="1" max="50" value="8"></label>
+        <label for="c-hours"><span class="lv"><span><span data-l="en">Hours each loses to busywork, per week</span><span data-l="de">Stunden Kleinkram pro Person und Woche</span></span><b id="o-hours">3</b></span><input id="c-hours" type="range" min="1" max="15" value="3"></label>
+        <label for="c-rate"><span class="lv"><span><span data-l="en">Cost of one staff hour</span><span data-l="de">Kosten einer Arbeitsstunde</span></span><b id="o-rate">€40</b></span><input id="c-rate" type="range" min="20" max="90" step="5" value="40"></label>
+      </div>
+      <div class="result" aria-live="polite">
+        <span class="label" style="color:inherit;opacity:.65" data-l="en">Per year, at 46 working weeks</span>
+        <span class="label" style="color:inherit;opacity:.65" data-l="de">Pro Jahr, bei 46 Arbeitswochen</span>
+        <span class="big" id="o-euro">€44,160</span>
+        <span class="hrs"><span id="o-yhours">1,104</span> <span data-l="en">hours</span><span data-l="de">Stunden</span></span>
+        <p data-l="en">If a plan wins back a third of that, the €290 audit pays for itself in <b id="o-pay-en">1 week</b>.</p>
+        <p data-l="de">Holt ein Plan davon ein Drittel zurück, hat sich der Zeit-Check für 290 € nach <b id="o-pay-de">1 Woche</b> bezahlt gemacht.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec band" id="how">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">How it works</span><span class="label" data-l="de">So läuft es</span>
+      <h2 data-l="en">From a 15-minute call to a working helper.</h2>
+      <h2 data-l="de">Von 15 Minuten Gespräch zum ersten Helfer.</h2>
+    </div>
     <ol class="steps">
-      <li><span data-l="en"><b>15-minute intro, free.</b> Phone or video.</span><span data-l="de"><b>15 Minuten kennenlernen, kostenlos.</b> Am Telefon oder per Video.</span></li>
-      <li><span data-l="en"><b>A first look in writing, free, within 24 hours.</b> What I heard, where most of the time probably goes, and what the audit would check. If it fits, eight short questions to answer before the call.</span><span data-l="de"><b>Ihre erste Einschätzung, schriftlich, kostenlos, innerhalb von 24 Stunden.</b> Was ich gehört habe, wo vermutlich die meiste Zeit hängt und was ich im Zeit-Check prüfen würde. Wenn es passt, acht kurze Fragen vorab.</span></li>
-      <li><span data-l="en"><b>The audit call, 45 to 60 minutes.</b> You and up to two people from your team. We walk through real cases: the last enquiry, the last quote, the last rescheduled appointment. Before anything changes, we write down together, step by step, where the time goes. Recorded only if you agree. The invoice comes with the booking and is paid before the call.</span><span data-l="de"><b>Das Zeit-Check-Gespräch, 45 bis 60 Minuten.</b> Mit Ihnen und bis zu zwei Leuten aus dem Team. Wir gehen echte Fälle durch: die letzte Anfrage, das letzte Angebot, die letzte Terminänderung. Bevor irgendetwas geändert wird, schreiben wir gemeinsam Schritt für Schritt auf, wohin die Zeit geht. Aufgenommen wird nur, wenn Sie zustimmen. Die Rechnung kommt mit der Terminbestätigung und ist vor dem Gespräch fällig.</span></li>
-      <li><span data-l="en"><b>Your plan in 3 to 5 working days.</b> We go through it together in 30 minutes, on screen or in person.</span><span data-l="de"><b>Ihr Plan nach drei bis fünf Werktagen.</b> Wir gehen ihn in 30 Minuten gemeinsam durch, am Bildschirm oder bei Ihnen.</span></li>
+      <li><span class="when" data-l="en">Day 1 · free</span><span class="when" data-l="de">Tag 1 · kostenlos</span><b data-l="en">15-minute intro</b><b data-l="de">15 Minuten kennenlernen</b><p data-l="en">Phone or video. You tell me where the week goes.</p><p data-l="de">Am Telefon oder per Video. Sie erzählen, wo die Woche hingeht.</p></li>
+      <li><span class="when" data-l="en">Within 24 h · free</span><span class="when" data-l="de">Innerhalb 24 Std. · kostenlos</span><b data-l="en">A first look in writing</b><b data-l="de">Erste Einschätzung, schriftlich</b><p data-l="en">What I heard, where most time probably goes, what the audit would check.</p><p data-l="de">Was ich gehört habe, wo vermutlich die meiste Zeit hängt, was der Zeit-Check prüfen würde.</p></li>
+      <li><span class="when" data-l="en">45 to 60 min · €290</span><span class="when" data-l="de">45 bis 60 Min. · 290 €</span><b data-l="en">The audit call</b><b data-l="de">Das Zeit-Check-Gespräch</b><p data-l="en">You and up to two people. We walk through real cases and write down, step by step, where the time goes.</p><p data-l="de">Sie und bis zu zwei Leute. Wir gehen echte Fälle durch und schreiben Schritt für Schritt auf, wohin die Zeit geht.</p></li>
+      <li><span class="when" data-l="en">3 to 5 working days</span><span class="when" data-l="de">3 bis 5 Werktage</span><b data-l="en">Your plan</b><b data-l="de">Ihr Plan</b><p data-l="en">Two pages. We go through it together in 30 minutes.</p><p data-l="de">Zwei Seiten. Wir gehen ihn in 30 Minuten gemeinsam durch.</p></li>
+      <li><span class="when" data-l="en">Within 14 days of your go</span><span class="when" data-l="de">14 Tage nach Ihrer Freigabe</span><b data-l="en">First helper running</b><b data-l="de">Erster Helfer läuft</b><p data-l="en">Built in your own accounts. Or the first month is free.</p><p data-l="de">In Ihren eigenen Konten eingerichtet. Sonst ist der erste Monat gratis.</p></li>
     </ol>
-  </section>
+  </div>
+</section>
 
-  <section>
-    <h2 data-l="en">What you get</h2><h2 data-l="de">Was Sie bekommen</h2>
-    <ul class="list">
-      <li><span data-l="en">A task table: which task, who does it, how often, how long, and what it costs you a year</span><span data-l="de">Eine Übersicht: welche Aufgabe, wer sie macht, wie oft, wie lange und was sie im Jahr kostet</span></li>
-      <li><span data-l="en">The three biggest time savers, each with before and after, in hours and euros</span><span data-l="de">Die drei größten Zeitfresser, jeweils mit vorher und nachher, in Stunden und Euro</span></li>
-      <li><span data-l="en">An approval map: what may run on its own, what comes to you as a draft, what always stays with you</span><span data-l="de">Eine Freigabe-Liste: was darf von selbst laufen, was kommt als Entwurf, was bleibt immer bei Ihnen</span></li>
-      <li><span data-l="en">The first step, concrete: what, for whom, by when</span><span data-l="de">Den ersten Schritt, ganz konkret: was, für wen, bis wann</span></li>
-      <li><span data-l="en">An honest 90-day estimate. Estimates are labelled as estimates.</span><span data-l="de">Eine ehrliche Rechnung für 90 Tage. Schätzungen stehen als Schätzung da.</span></li>
-      <li><span data-l="en">Want to see one first? Ask for the sample plan (an invented catering firm, labelled as a sample).</span><span data-l="de">Vorher ansehen? Fragen Sie nach dem Beispiel-Plan (erfundener Catering-Betrieb, als Beispiel gekennzeichnet).</span></li>
-    </ul>
-  </section>
-
-  <section>
-    <div class="split">
-      <div class="card">
-        <h3 data-l="en">What I never do</h3><h3 data-l="de">Was ich nie mache</h3>
-        <ul class="list">
-          <li><span data-l="en">Send anything to your customers without your OK</span><span data-l="de">Etwas ohne Ihre Freigabe an Kunden schicken</span></li>
-          <li><span data-l="en">Touch your inbox without your written OK. The audit needs no logins at all</span><span data-l="de">Ohne schriftliches OK an Ihr Postfach gehen. Für den Zeit-Check brauche ich keine Zugänge</span></li>
-          <li><span data-l="en">Lock you in: everything runs in your accounts and you can switch any helper off</span><span data-l="de">Sie binden: alles läuft in Ihren Konten, jeden Helfer schalten Sie selbst ab</span></li>
-          <li><span data-l="en">Sell you new software on a hunch, or give tax or legal advice</span><span data-l="de">Neue Software auf Verdacht verkaufen oder Steuer- und Rechtsberatung geben</span></li>
-        </ul>
+<!-- PRICES + PROMISE -->
+<section class="sec" id="prices">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">Prices</span><span class="label" data-l="de">Preise</span>
+      <h2 data-l="en">Two prices, both on the page.</h2>
+      <h2 data-l="de">Zwei Preise, beide offen.</h2>
+    </div>
+    <div class="prices">
+      <div class="price main">
+        <span class="tag" data-l="en">Founding offer · first 3 teams</span><span class="tag" data-l="de">Gründungsangebot · die ersten 3 Betriebe</span>
+        <span class="label" data-l="en">Time audit</span><span class="label" data-l="de">Zeit-Check</span>
+        <span class="amt">€290 <s>€790</s></span>
+        <p data-l="en">One-off. Then €390, later €790. Fully credited against your first month if you continue.</p>
+        <p data-l="de">Einmalig. Danach 390 €, später 790 €. Machen Sie weiter, wird der Betrag voll mit dem ersten Monat verrechnet.</p>
       </div>
-      <div class="card">
-        <h3 data-l="en">Who it's for</h3><h3 data-l="de">Für wen</h3>
-        <p data-l="en">Teams where enquiries, quotes, appointments, orders or invoices cross the desk every day: trades, property management, moving and cleaning, practices, event catering. Remote in English, German or Russian.</p>
-        <p data-l="de">Betriebe, in denen jeden Tag Anfragen, Angebote, Termine, Bestellungen oder Rechnungen über den Tisch gehen: Handwerk, Hausverwaltung, Umzug und Reinigung, Praxen, Event-Catering. Auch per Video, auf Deutsch, Englisch oder Russisch.</p>
-        <p data-l="en">Not for you if messages should go to customers unchecked, or you want ready-made industry software.</p>
-        <p data-l="de">Nicht das Richtige, wenn Nachrichten ungeprüft an Kunden gehen sollen oder Sie eine fertige Branchensoftware suchen.</p>
+      <div class="price">
+        <span class="tag" data-l="en">Optional</span><span class="tag" data-l="de">Freiwillig</span>
+        <span class="label" data-l="en">Monthly help</span><span class="label" data-l="de">Monatliche Begleitung</span>
+        <span class="amt"><small data-l="en">from </small><small data-l="de">ab </small>€490<small data-l="en"> /month</small><small data-l="de"> /Monat</small></span>
+        <p data-l="en">A new helper for one person every two weeks, built in your own accounts. Cancel any month, no minimum term for the first 3 teams.</p>
+        <p data-l="de">Alle zwei Wochen ein neuer Helfer für eine Person, in Ihren eigenen Konten. Monatlich kündbar, ohne Mindestlaufzeit für die ersten 3 Betriebe.</p>
       </div>
     </div>
-  </section>
-
-  <section>
-    <h2 data-l="en">Who's behind it</h2><h2 data-l="de">Wer dahintersteht</h2>
-    <p data-l="en">I'm Anton Küppers, based in Berlin-Schöneberg. I grew up across several countries and work in German, English and Russian. I build small AI helpers that take repeat office work off people, for example a tool that turns a messy catering order email thread into a one-page brief with every detail and its source, plus a draft reply the owner checks before sending.</p>
-    <p data-l="de">Ich bin Anton Küppers aus Berlin-Schöneberg. Aufgewachsen bin ich in mehreren Ländern, ich arbeite auf Deutsch, Englisch und Russisch. Ich baue kleine Helfer mit KI, die Menschen wiederkehrende Büroarbeit abnehmen, zum Beispiel ein Werkzeug, das aus einem unübersichtlichen E-Mail-Verlauf zu einer Catering-Bestellung eine Seite macht: alle Eckdaten mit Quelle und ein Antwortentwurf, den die Inhaberin vor dem Senden prüft.</p>
-  </section>
-
-  <section>
-    <div class="contact">
-      <span class="label" data-l="en">Book the free 15 minutes</span><span class="label" data-l="de">15 Minuten kostenlos kennenlernen</span>
-      <div class="row"><a class="mono" id="phone" href="https://wa.me/4915229325796">+49 152 2932 5796</a><span class="label" style="opacity:.7">WhatsApp</span><button class="copy" type="button" data-copy="phone">Copy</button></div>
-      <div class="row"><a class="mono" id="mail" href="mailto:anton@hourlo.co">anton@hourlo.co</a><button class="copy" type="button" data-copy="mail">Copy</button></div>
+    <div class="promise">
+      <h3 data-l="en">My promise</h3><h3 data-l="de">Meine Zusage</h3>
+      <div>
+        <p data-l="en">The plan names three places where your team loses time, right at the top, each backed by numbers from your own work, for example minutes per week we counted or measured. If it doesn't, you get the €290 back. If nothing is worth doing, I write that in the plan and you pay nothing.</p>
+        <p data-l="de">Der Plan nennt gleich vorne drei Stellen, an denen bei Ihnen Zeit verloren geht, jede belegt mit Zahlen aus Ihrer eigenen Arbeit, zum Beispiel gezählten oder gemessenen Minuten pro Woche. Schafft er das nicht, bekommen Sie die 290 € zurück. Wenn sich bei Ihnen nichts lohnt, schreibe ich das in den Plan, und Sie zahlen nichts.</p>
+        <p data-l="en">I don't promise a set saving. I promise a plan built on your numbers, and a first helper running within 14 days of your go-ahead, or the first month is free.</p>
+        <p data-l="de">Ich verspreche keine bestimmte Ersparnis. Ich verspreche einen Plan mit Ihren Zahlen und einen ersten Helfer, der 14 Tage nach Ihrer Freigabe läuft, sonst ist der erste Monat gratis.</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <p>Hourlo, Anton Claudius Küppers · Rubensstraße 39, 12159 Berlin · <span data-l="en">Small business under § 19 UStG, no VAT charged. Prices are final.</span><span data-l="de">Kleinunternehmer nach § 19 UStG, es wird keine Umsatzsteuer berechnet. Alle Preise sind Endpreise.</span></p>
+<!-- PHONE ADD-ON -->
+<section class="sec band" id="phone">
+  <div class="in phone">
+    <div class="sec-head" style="margin-bottom:0">
+      <span class="label" data-l="en">Add-on · Hourlo Phone</span><span class="label" data-l="de">Zusatz · Hourlo Telefon</span>
+      <h2 data-l="en">Never lose a caller you couldn't pick up for.</h2>
+      <h2 data-l="de">Kein Anrufer geht mehr verloren, nur weil Sie nicht rangehen konnten.</h2>
+      <p data-l="en">When you're busy, the caller leaves a message. A minute later you get one WhatsApp: who called, their number, what they want, and a reply you can send with one tap.</p>
+      <p data-l="de">Wenn Sie beschäftigt sind, hinterlässt der Anrufer eine Nachricht. Eine Minute später haben Sie eine WhatsApp: wer angerufen hat, die Nummer, was er möchte, und eine Antwort, die Sie mit einem Tipp senden.</p>
+      <p class="mono" style="color:var(--ink);font-size:16px"><span data-l="en">€49 a month · no new phone number needed</span><span data-l="de">49 € im Monat · Ihre Nummer bleibt</span></p>
+    </div>
+    <div class="wa" aria-label="Example WhatsApp message">
+      <span class="label">Hourlo · <span data-l="en">missed call</span><span data-l="de">verpasster Anruf</span></span>
+      <div class="msg">
+        <b>Frau Schulz · 0151 234 5678</b>
+        <span data-l="en">Wants a quote for painting a 3-room flat in Steglitz, ideally in November. Asks for a callback after 4 pm.</span>
+        <span data-l="de">Möchte ein Angebot für den Anstrich einer 3-Zimmer-Wohnung in Steglitz, am liebsten im November. Bittet um Rückruf nach 16 Uhr.</span>
+        <span class="meta" data-l="en">Today 11:42 · voice message 0:48 · Listen</span>
+        <span class="meta" data-l="de">Heute 11:42 · Sprachnachricht 0:48 · Anhören</span>
+      </div>
+      <span class="reply" data-l="en">Reply: "Thanks, I'll call you after 4 pm"</span>
+      <span class="reply" data-l="de">Antworten: „Danke, ich rufe Sie nach 16 Uhr an“</span>
+      <span class="label" data-l="en">Example message</span><span class="label" data-l="de">Beispielnachricht</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="sec" id="privacy">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">Your data</span><span class="label" data-l="de">Ihre Daten</span>
+      <h2 data-l="en">Your data stays with you.</h2>
+      <h2 data-l="de">Ihre Daten bleiben bei Ihnen.</h2>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3 data-l="en">The audit needs no logins</h3><h3 data-l="de">Der Zeit-Check braucht keine Zugänge</h3><p data-l="en">We talk through real cases. I don't touch your inbox or systems without your written OK.</p><p data-l="de">Wir sprechen echte Fälle durch. An Ihr Postfach oder Ihre Systeme gehe ich nur mit Ihrem schriftlichen OK.</p></div>
+      <div class="card"><h3 data-l="en">Everything runs in your accounts</h3><h3 data-l="de">Alles läuft in Ihren Konten</h3><p data-l="en">Helpers live in the tools you already pay for. You can switch any of them off yourself, and nothing locks you in.</p><p data-l="de">Die Helfer laufen in den Programmen, die Sie schon haben. Sie können jeden selbst abschalten, nichts bindet Sie.</p></div>
+      <div class="card"><h3 data-l="en">A data processing agreement first</h3><h3 data-l="de">Erst der AV-Vertrag</h3><p data-l="en">Before any helper handles customer data, we sign an agreement under Art. 28 GDPR (AVV).</p><p data-l="de">Bevor ein Helfer Kundendaten verarbeitet, schließen wir einen Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.</p></div>
+      <div class="card"><h3 data-l="en">Nothing goes out without you</h3><h3 data-l="de">Nichts geht ohne Sie raus</h3><p data-l="en">Messages to your customers come to you as drafts until you decide otherwise. I only use AI services whose business terms exclude training on your data.</p><p data-l="de">Nachrichten an Ihre Kunden kommen als Entwurf zu Ihnen, bis Sie etwas anderes festlegen. Ich nutze nur KI-Dienste, deren Geschäftsbedingungen das Training mit Ihren Daten ausschließen.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec band" id="about">
+  <div class="in about">
+    <img src="/img/anton.jpg" width="640" height="800" alt="Anton Küppers" loading="lazy">
+    <div class="txt">
+      <span class="label" data-l="en">Who's behind it</span><span class="label" data-l="de">Wer dahintersteht</span>
+      <h2 style="font-size:32px" data-l="en">Hi, I'm Anton.</h2>
+      <h2 style="font-size:32px" data-l="de">Hallo, ich bin Anton.</h2>
+      <p data-l="en">I live in Berlin-Schöneberg and build small AI helpers that take repeat office work off people's desks.</p>
+      <p data-l="de">Ich wohne in Berlin-Schöneberg und baue kleine KI-Helfer, die Menschen wiederkehrende Büroarbeit abnehmen.</p>
+      <p data-l="en">One example: a catering owner got order emails that ran to twenty messages. Now a helper turns each thread into one page with every detail and where it came from, plus a draft reply she checks before sending.</p>
+      <p data-l="de">Ein Beispiel: Eine Catering-Inhaberin bekam Bestell-Mails mit zwanzig Nachrichten im Verlauf. Jetzt macht ein Helfer daraus eine Seite mit allen Eckdaten und ihrer Quelle, dazu einen Antwortentwurf, den sie vor dem Senden prüft.</p>
+      <p data-l="en">I grew up in seven countries, so I'm used to explaining things plainly. You'll talk to me, not a sales team.</p>
+      <p data-l="de">Aufgewachsen bin ich in sieben Ländern, deshalb erkläre ich Dinge gern einfach. Sie sprechen mit mir, nicht mit einem Vertriebsteam.</p>
+      <div class="facts"><span>Deutsch</span><span>English</span><span>Русский</span><span data-l="en">In person in Berlin</span><span data-l="de">Vor Ort in Berlin</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label">FAQ</span>
+      <h2 data-l="en">Questions owners ask first.</h2>
+      <h2 data-l="de">Was Inhaber zuerst fragen.</h2>
+    </div>
+    <div class="faq">
+      <details><summary><span data-l="en">Do I need to buy new software?</span><span data-l="de">Muss ich neue Software kaufen?</span></summary><p data-l="en">Usually not. I build inside what you already use, like Google or Microsoft 365, your email and your booking tool. If something new would really pay off, the plan says so with the cost next to it.</p><p data-l="de">Meistens nicht. Ich baue in dem, was Sie schon nutzen, etwa Google oder Microsoft 365, Ihr Mailprogramm und Ihr Buchungssystem. Lohnt sich etwas Neues wirklich, steht es mit Preis im Plan.</p></details>
+      <details><summary><span data-l="en">How much of my time does it take?</span><span data-l="de">Wie viel Zeit kostet mich das?</span></summary><p data-l="en">15 minutes for the intro, 45 to 60 for the audit call, and 30 to go through the plan. That's under two hours in total.</p><p data-l="de">15 Minuten zum Kennenlernen, 45 bis 60 für das Zeit-Check-Gespräch und 30, um den Plan durchzugehen. Zusammen unter zwei Stunden.</p></details>
+      <details><summary><span data-l="en">What if nothing is worth automating?</span><span data-l="de">Was, wenn sich nichts lohnt?</span></summary><p data-l="en">Then the plan says so and you pay nothing. I'd rather tell you than sell you something that won't pay off.</p><p data-l="de">Dann steht das im Plan, und Sie zahlen nichts. Lieber sage ich Ihnen das, als Ihnen etwas zu verkaufen, das sich nicht rechnet.</p></details>
+      <details><summary><span data-l="en">Is my customers' data safe?</span><span data-l="de">Sind die Daten meiner Kunden sicher?</span></summary><p data-l="en">The audit needs no access at all. Before any helper touches customer data we sign a data processing agreement, and everything runs in your own accounts.</p><p data-l="de">Für den Zeit-Check brauche ich keinen Zugang. Bevor ein Helfer Kundendaten berührt, schließen wir einen AV-Vertrag, und alles läuft in Ihren eigenen Konten.</p></details>
+      <details><summary><span data-l="en">Do you work remotely?</span><span data-l="de">Geht das auch per Video?</span></summary><p data-l="en">Yes, by video in German, English or Russian. In Berlin I'm happy to come by.</p><p data-l="de">Ja, per Video auf Deutsch, Englisch oder Russisch. In Berlin komme ich auch gern vorbei.</p></details>
+      <details><summary><span data-l="en">What happens after the plan?</span><span data-l="de">Was passiert nach dem Plan?</span></summary><p data-l="en">You can take it and do it yourself. Or you book monthly help and I build one helper every two weeks. The €290 counts toward the first month, and you can cancel any month.</p><p data-l="de">Sie können ihn nehmen und selbst umsetzen. Oder Sie buchen die monatliche Begleitung, und ich baue alle zwei Wochen einen Helfer. Die 290 € werden mit dem ersten Monat verrechnet, kündbar ist jeden Monat.</p></details>
+      <details><summary><span data-l="en">Do you give tax or legal advice?</span><span data-l="de">Beraten Sie auch steuerlich oder rechtlich?</span></summary><p data-l="en">No. I set up how the work flows. Tax and legal questions stay with your adviser.</p><p data-l="de">Nein. Ich richte ein, wie die Arbeit läuft. Steuer- und Rechtsfragen bleiben bei Ihrer Beratung.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section class="sec" id="book" style="padding-top:0">
+  <div class="in">
+    <div class="book">
+      <div>
+        <span class="label" style="color:inherit;opacity:.6" data-l="en">Free · 15 minutes · no obligation</span>
+        <span class="label" style="color:inherit;opacity:.6" data-l="de">Kostenlos · 15 Minuten · unverbindlich</span>
+        <h2 data-l="en">Tell me where your week goes.</h2>
+        <h2 data-l="de">Erzählen Sie mir, wo Ihre Woche hingeht.</h2>
+        <p data-l="en">Pick a time that suits you, weekdays 10 to 13, by video call. Prefer to write or call? That works too. You get a written first look within 24 hours.</p>
+        <p data-l="de">Wählen Sie einen Termin, der Ihnen passt, werktags 10 bis 13 Uhr per Videocall. Lieber schreiben oder anrufen? Geht genauso. Ihre erste Einschätzung bekommen Sie innerhalb von 24 Stunden.</p>
+      </div>
+      <div class="contact">
+        <a class="btn primary pick" href="https://calendly.com/anton-hourlo/kennenlernen" target="_blank" rel="noopener"><span data-l="en">Pick a time</span><span data-l="de">Termin wählen</span></a>
+        <p class="note" data-l="en">Opens Calendly, a booking service. Details in the <a href="/datenschutz.html">privacy notice</a>.</p>
+        <p class="note" data-l="de">Öffnet Calendly, einen Buchungsdienst. Mehr dazu im <a href="/datenschutz.html">Datenschutz</a>.</p>
+        <div class="row"><a id="c-wa" href="https://wa.me/4915229325796">+49 152 2932 5796</a><button class="copy" type="button" data-copy="c-wa">Copy</button><span class="what">WhatsApp · <span data-l="en">phone</span><span data-l="de">Telefon</span></span></div>
+        <div class="row"><a id="c-mail" href="mailto:anton@hourlo.co">anton@hourlo.co</a><button class="copy" type="button" data-copy="c-mail">Copy</button><span class="what">E-Mail</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="in">
+    <p>Hourlo, Anton Claudius Küppers · Rubensstraße 39, 12159 Berlin<br><span data-l="en">Small business under § 19 UStG, no VAT charged. Prices are final.</span><span data-l="de">Kleinunternehmer nach § 19 UStG, es wird keine Umsatzsteuer berechnet. Alle Preise sind Endpreise.</span></p>
     <p><a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></p>
-  </footer>
-</div>
+  </div>
+</footer>
 
 <script>
 (function () {
   var root = document.documentElement;
-  function set(l) {
+
+  // Language: German browsers get German, everyone else English. Not stored.
+  function setLang(l) {
     root.lang = l;
     document.getElementById('l-en').setAttribute('aria-pressed', l === 'en');
     document.getElementById('l-de').setAttribute('aria-pressed', l === 'de');
+    fmtCalc();
   }
-  var start = 'en';
-  if ((navigator.language || '').slice(0, 2) === 'de') start = 'de';
-  set(start);
-  document.getElementById('l-en').addEventListener('click', function () { set('en'); });
-  document.getElementById('l-de').addEventListener('click', function () { set('de'); });
+  document.getElementById('l-en').addEventListener('click', function () { setLang('en'); });
+  document.getElementById('l-de').addEventListener('click', function () { setLang('de'); });
+
+  function num(n, d) { return n.toLocaleString(root.lang === 'de' ? 'de-DE' : 'en-GB', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  function euro(n) { return root.lang === 'de' ? num(n) + ' €' : '€' + num(n); }
+
+  // Week planner: 27 half-hour blocks of busywork (13.5 h); 19 of them (9.5 h) move to helpers.
+  var week = [
+    { en: 'Mon', de: 'Mo', cells: 'hhxhhx' },
+    { en: 'Tue', de: 'Di', cells: 'hxhhhx' },
+    { en: 'Wed', de: 'Mi', cells: 'hhhxh' },
+    { en: 'Thu', de: 'Do', cells: 'xhhhhx' },
+    { en: 'Fri', de: 'Fr', cells: 'hhxh' }
+  ];
+  var days = document.getElementById('days');
+  week.forEach(function (d) {
+    var row = document.createElement('div'); row.className = 'day';
+    row.innerHTML = '<span><span data-l="en">' + d.en + '</span><span data-l="de">' + d.de + '</span></span>';
+    var cells = document.createElement('div'); cells.className = 'cells';
+    for (var i = 0; i < 7; i++) {
+      var c = document.createElement('span');
+      var t = d.cells.charAt(i);
+      c.className = 'cell' + (t === 'h' ? ' h' : t === '' ? ' empty' : '');
+      cells.appendChild(c);
+    }
+    row.appendChild(cells); days.appendChild(row);
+  });
+  var weekEl = document.getElementById('week'), wb = document.getElementById('w-before'), wa = document.getElementById('w-after'), wh = document.getElementById('w-hours');
+  function setWeek(after) {
+    weekEl.classList.toggle('after', after);
+    wb.setAttribute('aria-pressed', !after); wa.setAttribute('aria-pressed', after);
+    wh.textContent = num(after ? 4 : 13.5, 1);
+  }
+  wb.addEventListener('click', function () { setWeek(false); });
+  wa.addEventListener('click', function () { setWeek(true); });
+
+  // Calculator
+  var cp = document.getElementById('c-people'), ch = document.getElementById('c-hours'), cr = document.getElementById('c-rate');
+  function fmtCalc() {
+    if (!cp) return;
+    var h = cp.value * ch.value * 46;
+    document.getElementById('o-people').textContent = cp.value;
+    document.getElementById('o-hours').textContent = ch.value;
+    document.getElementById('o-rate').textContent = euro(+cr.value);
+    document.getElementById('o-yhours').textContent = num(h);
+    document.getElementById('o-euro').textContent = euro(h * cr.value);
+    var wk = Math.max(1, Math.ceil(290 / (cp.value * ch.value * cr.value / 3)));
+    document.getElementById('o-pay-en').textContent = wk + (wk === 1 ? ' week' : ' weeks');
+    document.getElementById('o-pay-de').textContent = wk + (wk === 1 ? ' Woche' : ' Wochen');
+    wh.textContent = num(weekEl.classList.contains('after') ? 4 : 13.5, 1);
+    document.querySelectorAll('.count').forEach(function (el) { el.textContent = num(+el.getAttribute('data-to'), 1); });
+    document.querySelector('.plan .euro b').textContent = euro(24840);
+    document.querySelectorAll('[data-n]').forEach(function (el) { el.textContent = num(+el.getAttribute('data-n'), +(el.getAttribute('data-d') || 0)); });
+  }
+  [cp, ch, cr].forEach(function (el) { el.addEventListener('input', fmtCalc); });
+
+  setLang((navigator.language || '').slice(0, 2) === 'de' ? 'de' : 'en');
+
+  // Hero: the hour figures count up once
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var els = document.querySelectorAll('.count'), t0 = null;
+    function step(t) {
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0) / 900, 1), e = 1 - Math.pow(1 - p, 3);
+      els.forEach(function (el) { el.textContent = num(+el.getAttribute('data-to') * e, 1); });
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Copy buttons
   document.querySelectorAll('.copy').forEach(function (b) {
     b.addEventListener('click', function () {
-      var t = document.getElementById(b.getAttribute('data-copy')).textContent;
+      var el = document.getElementById(b.getAttribute('data-copy'));
       var done = function () { b.textContent = '✓'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); };
-      if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () { window.getSelection().selectAllChildren(document.getElementById(b.getAttribute('data-copy'))); });
+      if (navigator.clipboard) navigator.clipboard.writeText(el.textContent).then(done, function () { window.getSelection().selectAllChildren(el); });
+      else window.getSelection().selectAllChildren(el);
     });
   });
 })();
