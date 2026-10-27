@@ -27,6 +27,7 @@
   --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --r: 10px; --gut: 24px;
+  --night: #0A0D13; --night-card: #10141C; --night-ink: #ECEFF4; --night-muted: #8B95A7; --night-line: rgba(126, 162, 245, .10); --night-accent: #7EA2F5;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --bg: #0E1116; --band: #12161D; --surface: #161A21; --ink: #ECEFF4; --muted: #9AA3B2; --line: #262C36; --accent: #7EA2F5; --accent-ink: #0E1116; --accent-soft: #1B2740; --ok: #5BC08F; color-scheme: dark; }
@@ -71,23 +72,59 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .top .btn { padding: 9px 13px; font-size: 14px; }
 
-/* hero */
-.hero { padding-block: 88px 112px; }
-.hero .in { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 56px; align-items: center; }
-.hero .eyebrow { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
-.hero h1 { font-size: clamp(40px, 6vw, 64px); letter-spacing: -.04em; line-height: 1.02; margin: 14px 0 20px; }
-.hero .lead { font-size: 18px; color: var(--muted); max-width: 46ch; }
+/* hero: "Night shift" (always dark, for every visitor) with the "Instrument" scan card. Its own night tokens on purpose. */
+.hero { position: relative; overflow: hidden; isolation: isolate; background: var(--night); color: var(--night-ink); padding-top: 96px; }
+.hero .in { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 56px; align-items: center; padding-bottom: 88px; }
+.h-grid { position: absolute; inset: 0; z-index: -2; background-image: linear-gradient(to right, var(--night-line) 1px, transparent 1px), linear-gradient(to bottom, var(--night-line) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: radial-gradient(ellipse 85% 75% at 62% 42%, #000 35%, transparent 82%); mask-image: radial-gradient(ellipse 85% 75% at 62% 42%, #000 35%, transparent 82%); }
+.ray { position: absolute; z-index: -1; height: 1px; width: 160px; left: -160px; background: linear-gradient(90deg, transparent, var(--night-accent), transparent); animation: ray 6s linear infinite; }
+.ray.r1 { top: 144px; } .ray.r2 { top: 336px; animation-delay: 2.1s; animation-duration: 7.5s; } .ray.r3 { top: 480px; animation-delay: 3.8s; }
+@keyframes ray { to { left: 110%; } }
+.aura { position: absolute; z-index: -1; width: 560px; height: 560px; right: -80px; top: 46%; transform: translateY(-50%); background: radial-gradient(circle, rgba(43, 89, 195, .5), transparent 62%); filter: blur(28px); pointer-events: none; }
+.coord { position: absolute; font: 500 11px var(--mono); letter-spacing: .06em; color: var(--night-muted); opacity: .75; }
+.coord.c1 { top: 22px; left: max(var(--gut), env(safe-area-inset-left, 0px)); }
+.coord.c2 { top: 22px; right: max(var(--gut), env(safe-area-inset-right, 0px)); }
+.hero .eyebrow { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--night-accent); }
+.hero h1 { font-size: clamp(40px, 6vw, 66px); letter-spacing: -.04em; line-height: 1.02; margin: 14px 0 20px; }
+.hero h1 .w { display: inline-block; animation: wIn .8s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 85ms); }
+@keyframes wIn { from { opacity: 0; transform: translateY(14px); } }
+.hero .lead { font-size: 18px; color: var(--night-muted); max-width: 46ch; }
 .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-.hero .fine { margin-top: 16px; font: 13px/1.5 var(--mono); color: var(--muted); }
-.plan { background: var(--band); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 14px; box-shadow: 0 24px 48px -28px rgba(18, 21, 27, .35); min-width: 0; }
-.plan .ph { display: flex; justify-content: space-between; gap: 12px; }
-.plan .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px dashed var(--line); font-size: 15px; }
-.plan .row b { font: 500 16px var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hero .btn.primary { background: var(--night-accent); color: var(--night); }
+.hero .btn.ghost { background: transparent; color: var(--night-ink); border-color: rgba(236, 239, 244, .2); }
+.hero .btn.ghost:hover { border-color: rgba(236, 239, 244, .5); }
+.hero .fine { margin-top: 16px; font: 13px/1.5 var(--mono); color: var(--night-muted); }
+.hero :focus-visible { outline-color: var(--night-accent); }
+@property --ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.glass { position: relative; border-radius: var(--r); padding: 1px; min-width: 0; background: conic-gradient(from var(--ang), rgba(126, 162, 245, .14) 0 62%, var(--night-accent) 75%, rgba(126, 162, 245, .14) 88%); animation: rot 8s linear infinite, rise .9s .3s cubic-bezier(.2, .8, .2, 1) both; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .8); }
+@keyframes rot { to { --ang: 360deg; } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.98); } }
+.plan { position: relative; overflow: hidden; border-radius: calc(var(--r) - 1px); background: color-mix(in srgb, var(--night-card) 90%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 22px; display: grid; gap: 14px; }
+.plan .label { color: var(--night-muted); }
+.plan .ph { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.live { display: inline-flex; align-items: center; gap: 6px; font: 500 11px var(--mono); letter-spacing: .06em; color: #5BC08F; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.2s steps(2, start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+.plan .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px dashed rgba(236, 239, 244, .1); font-size: 15px; transition: opacity .4s, transform .4s; }
+.plan .row b { font: 500 16px var(--mono); color: var(--night-accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plan.pending .row { opacity: .18; transform: translateX(-4px); }
+.plan .row.on { opacity: 1; transform: none; }
 .plan .tot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
-.plan .tot b { font: 600 26px var(--mono); font-variant-numeric: tabular-nums; }
-.plan .euro { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
-.plan .euro b { font: 500 14px var(--mono); color: var(--ink); }
-.plan .ex { font: 11px/1.5 var(--mono); color: var(--muted); }
+.plan .tot b { font: 500 28px var(--mono); font-variant-numeric: tabular-nums; }
+.plan .euro { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--night-muted); }
+.plan .euro b { font: 500 14px var(--mono); color: var(--night-ink); }
+.plan .status { font: 12px/1.4 var(--mono); color: var(--night-muted); min-height: 1.4em; }
+.plan .status::after { content: "▍"; margin-left: 2px; color: var(--night-accent); animation: blink 1s steps(2, start) infinite; }
+.plan .ex { font: 11px/1.5 var(--mono); color: var(--night-muted); }
+.beam { position: absolute; left: 0; right: 0; height: 64px; top: -70px; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(126, 162, 245, .08) 60%, rgba(126, 162, 245, .35) 97%, transparent); }
+.plan.scanning .beam { animation: sweep 2.8s cubic-bezier(.45, .05, .35, 1) forwards; }
+@keyframes sweep { to { top: 105%; } }
+/* industry ticker at the foot of the hero */
+.ticker { border-top: 1px solid var(--night-line); overflow: hidden; padding-block: 16px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.tk-track { display: flex; width: max-content; animation: tick 48s linear infinite; }
+.tk-group { display: flex; align-items: center; gap: 28px; padding-right: 28px; font: 500 13px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--night-muted); white-space: nowrap; }
+.tk-group i { font-style: normal; color: var(--night-accent); }
+.ticker:hover .tk-track { animation-play-state: paused; }
+@keyframes tick { to { transform: translateX(-50%); } }
 
 /* problem + week */
 .week { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 18px; }
@@ -99,7 +136,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .day { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; align-items: center; }
 .day > span { font: 500 12px var(--mono); color: var(--muted); }
 .cells { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
-.cell { height: 22px; border-radius: 4px; background: var(--line); transition: background-color .35s ease; }
+.cell { height: 22px; border-radius: 4px; background: var(--line); transition: background-color .35s ease, box-shadow .35s ease; }
 .cell.empty { background: transparent; border: 1px dashed var(--line); }
 .week.after .cell.h { background: var(--accent); }
 .week-foot { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: baseline; font-size: 14px; color: var(--muted); }
@@ -207,6 +244,47 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .contact .row .what { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; opacity: .6; flex: 1 0 auto; text-align: right; }
 .copy { font: 500 12px var(--mono); border: 1px solid currentColor; background: transparent; color: inherit; border-radius: var(--r); padding: 4px 8px; cursor: pointer; opacity: .8; }
 
+/* the offer, exactly */
+.offer-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-bottom: 12px; }
+.yesno { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 14px; align-content: start; }
+.yesno ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.yesno li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; font-size: 15px; }
+.yesno li::before { font: 500 14px/1.6 var(--mono); }
+.yesno.yes li::before { content: "+"; color: var(--ok); }
+.yesno.no li::before { content: "–"; color: var(--muted); }
+.yesno.no li { color: var(--muted); }
+.helpers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.helper { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.helper h3 { font-size: 19px; letter-spacing: -.02em; }
+.helper dl { margin: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px 12px; font-size: 15px; }
+.helper dt { font: 500 11px/1.9 var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.helper dd { margin: 0; color: var(--muted); }
+.helper dd.now { color: var(--ink); }
+.ctrl { justify-self: start; font: 500 12px var(--mono); padding: 5px 9px; border-radius: var(--r); background: var(--accent-soft); color: var(--accent); }
+.ctrl.alone { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.instant { margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+.instant > div { padding: 24px; display: grid; gap: 8px; align-content: start; }
+.instant > div + div { border-left: 1px solid var(--line); }
+.instant b { font: 500 34px/1 var(--mono); letter-spacing: -.02em; color: var(--accent); font-variant-numeric: tabular-nums; }
+.instant p { color: var(--muted); font-size: 15px; }
+.offer-note { margin-top: 14px; font: 12px/1.5 var(--mono); color: var(--muted); }
+
+/* small extras: live clock, spotlight, reveal, week glow */
+.clock { font: 500 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.clock .colon { animation: blink 1s steps(2, start) infinite; }
+@media (hover: hover) {
+  .spot { position: relative; isolation: isolate; }
+  .spot::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .25s; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); }
+  .spot:hover::before { opacity: 1; }
+  .spot:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+}
+.rv { opacity: 0; transform: translateY(18px); }
+.rv.on { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2, .8, .2, 1); }
+.week.after .cell.h { box-shadow: 0 0 10px -2px var(--accent); }
+.btn { transition: transform .15s ease, filter .15s ease, border-color .15s ease; }
+.btn:active { transform: scale(.97); }
+.calc .result .big, .calc .result .hrs { transition: color .2s; }
+
 footer { padding-block: 40px 56px; font-size: 13px; color: var(--muted); }
 footer .in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
 footer a { color: inherit; }
@@ -214,9 +292,18 @@ footer a { color: inherit; }
 @media (max-width: 960px) {
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .clock { display: none; }
 }
 @media (max-width: 860px) {
-  .hero .in, .problem, .get, .calc, .phone, .book, .about { grid-template-columns: minmax(0, 1fr); }
+  .hero .in, .problem, .get, .calc, .phone, .book, .about, .offer-top, .helpers { grid-template-columns: minmax(0, 1fr); }
+  .hero { padding-top: 72px; }
+  .hero .in { padding-bottom: 64px; gap: 40px; }
+  .aura { width: 380px; height: 380px; right: -120px; top: 72%; }
+  .coord.c2 { display: none; }
+  .instant { grid-template-columns: minmax(0, 1fr); }
+  .instant > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .helper dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .helper dd + dt { margin-top: 8px; }
   .promise { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .wa { justify-self: start; }
   .top nav a.link { display: none; }
@@ -230,6 +317,14 @@ footer a { color: inherit; }
   .top .btn .long { display: none; }
   .contact .row .what { text-align: left; flex-basis: 100%; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .ray, .beam, .live::before, .plan .status::after, .clock .colon { animation: none !important; }
+  .ray { display: none; }
+  .hero h1 .w, .glass { animation: none !important; }
+  .tk-track { animation: none; flex-wrap: wrap; width: auto; }
+  .tk-track .tk-group[aria-hidden] { display: none; }
+  .rv { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>
@@ -238,6 +333,8 @@ footer a { color: inherit; }
   <div class="in">
     <a class="logo" href="/" aria-label="Hourlo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 336 96"><path d="M5.0,9.0V95.0M5.0,70A25,25 0 0 1 55.0,70V95.0M76,70A25,25 0 1 1 126,70A25,25 0 1 1 76,70M147.0,45.0V70A25,25 0 0 0 197.0,70M197.0,45.0V95.0M218.0,95.0V45.0M218.0,70A25,25 0 0 1 243.0,45M260.0,9.0V95.0" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="306" cy="70" r="25" fill="none" stroke="currentColor" stroke-width="10"/><path d="M306,70V53.5A16.5,16.5 0 0 1 322.5,70Z" style="fill:var(--accent)"/></svg></a>
     <nav>
+      <span class="clock" id="clock" aria-hidden="true"></span>
+      <a class="link" href="#offer"><span data-l="en">The offer</span><span data-l="de">Angebot</span></a>
       <a class="link" href="#how"><span data-l="en">How it works</span><span data-l="de">So läuft es</span></a>
       <a class="link" href="#prices"><span data-l="en">Prices</span><span data-l="de">Preise</span></a>
       <a class="link" href="#faq">FAQ</a>
@@ -254,6 +351,11 @@ footer a { color: inherit; }
 
 <!-- HERO -->
 <section class="hero">
+  <div class="h-grid" aria-hidden="true"></div>
+  <div class="ray r1" aria-hidden="true"></div><div class="ray r2" aria-hidden="true"></div><div class="ray r3" aria-hidden="true"></div>
+  <div class="aura" aria-hidden="true"></div>
+  <span class="coord c1" aria-hidden="true">52.488° N · 13.338° E</span>
+  <span class="coord c2" aria-hidden="true">HOURLO / <span data-l="en">TIME AUDIT</span><span data-l="de">ZEIT-CHECK</span></span>
   <div class="in">
     <div>
       <span class="eyebrow" data-l="en">For teams of 5 to 50 · Berlin and remote</span>
@@ -270,15 +372,30 @@ footer a { color: inherit; }
       <p class="fine" data-l="de">Zeit-Check 290 € · Geld zurück, wenn der Plan nicht hält, was er verspricht</p>
     </div>
 
-    <div class="plan" aria-label="Sample plan">
-      <div class="ph"><span class="label" data-l="en">Time audit · plan</span><span class="label" data-l="de">Zeit-Check · Plan</span><span class="label">1 / 2</span></div>
+    <div class="glass"><div class="plan" id="scan" aria-label="Sample plan">
+      <div class="beam" aria-hidden="true"></div>
+      <div class="ph"><span class="label" data-l="en">Time audit · plan</span><span class="label" data-l="de">Zeit-Check · Plan</span><span class="live" aria-hidden="true">LIVE</span></div>
       <div class="row"><span data-l="en">Same tenant questions by email</span><span data-l="de">Dieselben Mieterfragen per Mail</span><b><span class="count" data-to="6.0">6.0</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
       <div class="row"><span data-l="en">Chasing incomplete damage reports</span><span data-l="de">Unvollständigen Schadenmeldungen hinterher</span><b><span class="count" data-to="4.5">4.5</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
       <div class="row"><span data-l="en">Invoices typed in twice</span><span data-l="de">Rechnungen doppelt abgetippt</span><b><span class="count" data-to="3.0">3.0</span> <span data-l="en">h/wk</span><span data-l="de">Std./Wo.</span></b></div>
       <div class="tot"><span data-l="en">Found per week</span><span data-l="de">Gefunden pro Woche</span><b><span class="count" data-to="13.5">13.5</span> <span data-l="en">h</span><span data-l="de">Std.</span></b></div>
       <div class="euro"><span data-l="en">What it costs a year at €40 an hour</span><span data-l="de">Kosten im Jahr bei 40 € pro Stunde</span><b>€24,840</b></div>
+      <div class="status" id="scan-status" aria-hidden="true"></div>
       <span class="ex" data-l="en">Sample: an invented property management firm with 9 people</span>
       <span class="ex" data-l="de">Beispiel: eine erfundene Hausverwaltung mit 9 Leuten</span>
+    </div></div>
+  </div>
+  <div class="ticker">
+    <div class="tk-track" id="tk-track">
+      <div class="tk-group">
+        <span data-l="en">Tax advisers</span><span data-l="de">Steuerberatung</span><i>·</i>
+        <span data-l="en">Law offices</span><span data-l="de">Kanzleien</span><i>·</i>
+        <span data-l="en">Property management</span><span data-l="de">Hausverwaltung</span><i>·</i>
+        <span data-l="en">Trades and workshops</span><span data-l="de">Handwerk und Werkstätten</span><i>·</i>
+        <span data-l="en">Practices</span><span data-l="de">Praxen</span><i>·</i>
+        <span data-l="en">Catering and events</span><span data-l="de">Catering und Events</span><i>·</i>
+        <span data-l="en">Cleaning and moving firms</span><span data-l="de">Reinigung und Umzug</span><i>·</i>
+      </div>
     </div>
   </div>
 </section>
@@ -324,8 +441,109 @@ footer a { color: inherit; }
   </div>
 </section>
 
+<!-- THE OFFER, EXACTLY -->
+<section class="sec" id="offer">
+  <div class="in">
+    <div class="sec-head">
+      <span class="label" data-l="en">The offer, exactly</span><span class="label" data-l="de">Das Angebot, genau</span>
+      <h2 data-l="en">Small helpers that each take one job off one desk.</h2>
+      <h2 data-l="de">Kleine Helfer, die jeweils eine Aufgabe von einem Schreibtisch nehmen.</h2>
+      <p data-l="en">I measure where your office loses time, then build a helper for the biggest leak first, inside the programs you already use. A helper is a small automation with AI where it helps: it reads, sorts, fills in and drafts, and your team checks. Then the next one, one person at a time.</p>
+      <p data-l="de">Ich messe, wo in Ihrem Büro Zeit verloren geht, und baue zuerst einen Helfer für das größte Leck, in den Programmen, die Sie schon nutzen. Ein Helfer ist eine kleine Automatisierung, mit KI dort, wo sie hilft: Er liest, sortiert, füllt aus und entwirft, Ihr Team prüft. Danach der nächste, eine Person nach der anderen.</p>
+    </div>
+
+    <div class="offer-top">
+      <div class="yesno yes spot">
+        <span class="label" data-l="en">What you get</span><span class="label" data-l="de">Was Sie bekommen</span>
+        <ul>
+          <li><span data-l="en">Numbers before anything is built: minutes per task, counted from your real cases</span><span data-l="de">Zahlen, bevor irgendetwas gebaut wird: Minuten pro Aufgabe, gezählt an Ihren echten Fällen</span></li>
+          <li><span data-l="en">Helpers inside Google or Microsoft 365, your email, WhatsApp Business and your booking tool</span><span data-l="de">Helfer in Google oder Microsoft 365, Ihrem Mailprogramm, WhatsApp Business und Ihrem Buchungssystem</span></li>
+          <li><span data-l="en">You decide per helper: runs on its own, sends you a draft, or leaves the step to you</span><span data-l="de">Sie legen je Helfer fest: läuft allein, schickt Ihnen einen Entwurf, oder der Schritt bleibt bei Ihnen</span></li>
+          <li><span data-l="en">One person to talk to, in German, English or Russian</span><span data-l="de">Ein fester Ansprechpartner, auf Deutsch, Englisch oder Russisch</span></li>
+        </ul>
+      </div>
+      <div class="yesno no spot">
+        <span class="label" data-l="en">What you don't need</span><span class="label" data-l="de">Was Sie nicht brauchen</span>
+        <ul>
+          <li><span data-l="en">New software, a data migration or a training week</span><span data-l="de">Neue Software, einen Datenumzug oder eine Schulungswoche</span></li>
+          <li><span data-l="en">Passwords or access for the audit</span><span data-l="de">Passwörter oder Zugänge für den Zeit-Check</span></li>
+          <li><span data-l="en">A long contract: monthly help can be cancelled any month</span><span data-l="de">Einen langen Vertrag: die Begleitung ist monatlich kündbar</span></li>
+          <li><span data-l="en">To hand your customers to a chatbot: nothing goes out without your rules</span><span data-l="de">Ihre Kunden einem Chatbot zu überlassen: nichts geht ohne Ihre Regeln raus</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="helpers">
+      <div class="helper spot">
+        <span class="label" style="color:var(--accent)" data-l="en">Catering · trades</span><span class="label" style="color:var(--accent)" data-l="de">Catering · Handwerk</span>
+        <h3 data-l="en">Enquiry to one-page brief</h3><h3 data-l="de">Von der Anfrage zur Übersicht</h3>
+        <dl>
+          <dt data-l="en">Today</dt><dt data-l="de">Heute</dt>
+          <dd data-l="en">Details arrive in pieces over email and WhatsApp. Someone collects them and asks for what's missing.</dd><dd data-l="de">Angaben kommen stückweise per Mail und WhatsApp. Jemand sammelt sie und fragt nach, was fehlt.</dd>
+          <dt data-l="en">With it</dt><dt data-l="de">Mit Helfer</dt>
+          <dd class="now" data-l="en">Each enquiry becomes one page: every detail, where it came from, what's missing, and a draft reply.</dd><dd class="now" data-l="de">Jede Anfrage wird eine Seite: alle Angaben mit Quelle, was noch fehlt, und ein Antwortentwurf.</dd>
+        </dl>
+        <span class="ctrl" data-l="en">You check the draft, then send</span><span class="ctrl" data-l="de">Sie prüfen den Entwurf, dann senden</span>
+      </div>
+      <div class="helper spot">
+        <span class="label" style="color:var(--accent)" data-l="en">Tax advisers · law offices</span><span class="label" style="color:var(--accent)" data-l="de">Steuerberatung · Kanzleien</span>
+        <h3 data-l="en">Document chaser</h3><h3 data-l="de">Unterlagen nachfassen</h3>
+        <dl>
+          <dt data-l="en">Today</dt><dt data-l="de">Heute</dt>
+          <dd data-l="en">You ask clients for the same documents three times and keep track in your head.</dd><dd data-l="de">Sie fragen Mandanten dreimal nach denselben Unterlagen und behalten den Überblick im Kopf.</dd>
+          <dt data-l="en">With it</dt><dt data-l="de">Mit Helfer</dt>
+          <dd class="now" data-l="en">Friendly reminders go out on a schedule, and a list shows what has arrived and what's still missing.</dd><dd class="now" data-l="de">Freundliche Erinnerungen gehen nach Plan raus, eine Liste zeigt, was da ist und was noch fehlt.</dd>
+        </dl>
+        <span class="ctrl alone" data-l="en">Runs on its own, with wording you approved</span><span class="ctrl alone" data-l="de">Läuft allein, mit Texten, die Sie freigegeben haben</span>
+      </div>
+      <div class="helper spot">
+        <span class="label" style="color:var(--accent)" data-l="en">Property management · practices</span><span class="label" style="color:var(--accent)" data-l="de">Hausverwaltung · Praxen</span>
+        <h3 data-l="en">Answers to the same five questions</h3><h3 data-l="de">Antworten auf dieselben fünf Fragen</h3>
+        <dl>
+          <dt data-l="en">Today</dt><dt data-l="de">Heute</dt>
+          <dd data-l="en">Opening hours, prices, "is it done yet?", answered by hand, every day.</dd><dd data-l="de">Öffnungszeiten, Preise, „Ist es schon fertig?“, jeden Tag von Hand beantwortet.</dd>
+          <dt data-l="en">With it</dt><dt data-l="de">Mit Helfer</dt>
+          <dd class="now" data-l="en">Replies are drafted from your own price list, hours and notes. Unusual questions are flagged for you.</dd><dd class="now" data-l="de">Antworten werden aus Ihrer Preisliste, Ihren Zeiten und Notizen vorbereitet. Ungewöhnliche Fragen werden markiert.</dd>
+        </dl>
+        <span class="ctrl" data-l="en">You send with one click</span><span class="ctrl" data-l="de">Sie senden mit einem Klick</span>
+      </div>
+      <div class="helper spot">
+        <span class="label" style="color:var(--accent)" data-l="en">Trades · workshops</span><span class="label" style="color:var(--accent)" data-l="de">Handwerk · Werkstätten</span>
+        <h3 data-l="en">Job to invoice draft</h3><h3 data-l="de">Vom Auftrag zum Rechnungsentwurf</h3>
+        <dl>
+          <dt data-l="en">Today</dt><dt data-l="de">Heute</dt>
+          <dd data-l="en">Finished jobs are typed in again for the invoice, sometimes days later.</dd><dd data-l="de">Erledigte Aufträge werden für die Rechnung noch einmal abgetippt, manchmal Tage später.</dd>
+          <dt data-l="en">With it</dt><dt data-l="de">Mit Helfer</dt>
+          <dd class="now" data-l="en">Job details flow into an invoice draft in your accounting program the same day.</dd><dd class="now" data-l="de">Die Auftragsdaten landen am selben Tag als Rechnungsentwurf in Ihrem Buchhaltungsprogramm.</dd>
+        </dl>
+        <span class="ctrl" data-l="en">Sending stays with you</span><span class="ctrl" data-l="de">Das Versenden bleibt bei Ihnen</span>
+      </div>
+    </div>
+
+    <div class="instant">
+      <div>
+        <b>€0</b>
+        <p data-l="en"><strong style="color:var(--ink)">Value before you pay.</strong> The 15-minute call and the written first look are free, and yours to keep even if you never book.</p>
+        <p data-l="de"><strong style="color:var(--ink)">Nutzen, bevor Sie zahlen.</strong> Das 15-Minuten-Gespräch und die schriftliche Einschätzung sind kostenlos und gehören Ihnen, auch wenn Sie nie buchen.</p>
+      </div>
+      <div>
+        <b><span data-l="en">2 pages</span><span data-l="de">2 Seiten</span></b>
+        <p data-l="en"><strong style="color:var(--ink)">A plan you can use without me.</strong> Your three biggest leaks in hours and euros. Do it yourself if you like; it's yours.</p>
+        <p data-l="de"><strong style="color:var(--ink)">Ein Plan, der auch ohne mich funktioniert.</strong> Ihre drei größten Lecks in Stunden und Euro. Setzen Sie ihn gern selbst um, er gehört Ihnen.</p>
+      </div>
+      <div>
+        <b><span data-l="en">14 days</span><span data-l="de">14 Tage</span></b>
+        <p data-l="en"><strong style="color:var(--ink)">The first helper at work.</strong> Within 14 days of your go, on the biggest leak first. Or the first month is free.</p>
+        <p data-l="de"><strong style="color:var(--ink)">Der erste Helfer arbeitet.</strong> 14 Tage nach Ihrer Freigabe, zuerst am größten Leck. Sonst ist der erste Monat gratis.</p>
+      </div>
+    </div>
+    <p class="offer-note" data-l="en">Examples. Which helper comes first is decided by the numbers from your audit, not by me.</p>
+    <p class="offer-note" data-l="de">Beispiele. Welcher Helfer zuerst kommt, entscheiden die Zahlen aus Ihrem Zeit-Check, nicht ich.</p>
+  </div>
+</section>
+
 <!-- WHO IT'S FOR -->
-<section class="sec" id="who">
+<section class="sec band" id="who">
   <div class="in">
     <div class="sec-head">
       <span class="label" data-l="en">Who it's for</span><span class="label" data-l="de">Für wen</span>
@@ -333,18 +551,18 @@ footer a { color: inherit; }
       <h2 data-l="de">Betriebe, in denen jeden Tag Papierkram über den Tisch geht.</h2>
     </div>
     <div class="grid3">
-      <div class="card"><span class="label" data-l="en">Tax advisers</span><span class="label" data-l="de">Steuerberatung</span><h3 data-l="en">Receipts that arrive late and in pieces</h3><h3 data-l="de">Belege, die spät und stückweise kommen</h3><p data-l="en">Reminders to clients, sorting what came in, the same questions in tax season.</p><p data-l="de">Erinnerungen an Mandanten, Eingänge sortieren, dieselben Fragen in der Saison.</p></div>
-      <div class="card"><span class="label" data-l="en">Law offices</span><span class="label" data-l="de">Kanzleien</span><h3 data-l="en">New cases that start with a messy email</h3><h3 data-l="de">Neue Mandate, die mit einer wirren Mail beginnen</h3><p data-l="en">Pulling out names and dates, asking for missing documents, keeping deadlines in view.</p><p data-l="de">Namen und Fristen herausziehen, fehlende Unterlagen anfordern, Termine im Blick behalten.</p></div>
-      <div class="card"><span class="label" data-l="en">Property management</span><span class="label" data-l="de">Hausverwaltung</span><h3 data-l="en">Tenants asking the same things</h3><h3 data-l="de">Mieter, die dasselbe fragen</h3><p data-l="en">Emails and calls on repeat, damage reports that are only complete after the third reminder.</p><p data-l="de">Mails und Anrufe in Dauerschleife, Schadenmeldungen, die erst beim dritten Nachfragen vollständig sind.</p></div>
-      <div class="card"><span class="label" data-l="en">Trades and workshops</span><span class="label" data-l="de">Handwerk und Werkstätten</span><h3 data-l="en">From enquiry to quote takes too long</h3><h3 data-l="de">Von der Anfrage zum Angebot dauert es zu lange</h3><p data-l="en">Photos, measurements and addresses scattered across WhatsApp, then typed again for the invoice.</p><p data-l="de">Fotos, Maße und Adressen verstreut über WhatsApp, dann für die Rechnung noch einmal abgetippt.</p></div>
-      <div class="card"><span class="label" data-l="en">Practices</span><span class="label" data-l="de">Praxen</span><h3 data-l="en">The phone rings during every appointment</h3><h3 data-l="de">Das Telefon klingelt in jedem Termin</h3><p data-l="en">Booking, moving and reminding, plus forms that come back half filled in.</p><p data-l="de">Termine vergeben, verschieben, erinnern, und Formulare, die halb ausgefüllt zurückkommen.</p></div>
-      <div class="card"><span class="label" data-l="en">Catering and events</span><span class="label" data-l="de">Catering und Events</span><h3 data-l="en">Party enquiries with half the details</h3><h3 data-l="de">Feier-Anfragen mit der Hälfte der Angaben</h3><p data-l="en">Asking for the missing ones, writing quotes, following up. The Christmas enquiries are arriving now.</p><p data-l="de">Nachfragen, Angebote schreiben, nachhalten. Die Weihnachtsanfragen kommen genau jetzt.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Tax advisers</span><span class="label" data-l="de">Steuerberatung</span><h3 data-l="en">Receipts that arrive late and in pieces</h3><h3 data-l="de">Belege, die spät und stückweise kommen</h3><p data-l="en">Reminders to clients, sorting what came in, the same questions in tax season.</p><p data-l="de">Erinnerungen an Mandanten, Eingänge sortieren, dieselben Fragen in der Saison.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Law offices</span><span class="label" data-l="de">Kanzleien</span><h3 data-l="en">New cases that start with a messy email</h3><h3 data-l="de">Neue Mandate, die mit einer wirren Mail beginnen</h3><p data-l="en">Pulling out names and dates, asking for missing documents, keeping deadlines in view.</p><p data-l="de">Namen und Fristen herausziehen, fehlende Unterlagen anfordern, Termine im Blick behalten.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Property management</span><span class="label" data-l="de">Hausverwaltung</span><h3 data-l="en">Tenants asking the same things</h3><h3 data-l="de">Mieter, die dasselbe fragen</h3><p data-l="en">Emails and calls on repeat, damage reports that are only complete after the third reminder.</p><p data-l="de">Mails und Anrufe in Dauerschleife, Schadenmeldungen, die erst beim dritten Nachfragen vollständig sind.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Trades and workshops</span><span class="label" data-l="de">Handwerk und Werkstätten</span><h3 data-l="en">From enquiry to quote takes too long</h3><h3 data-l="de">Von der Anfrage zum Angebot dauert es zu lange</h3><p data-l="en">Photos, measurements and addresses scattered across WhatsApp, then typed again for the invoice.</p><p data-l="de">Fotos, Maße und Adressen verstreut über WhatsApp, dann für die Rechnung noch einmal abgetippt.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Practices</span><span class="label" data-l="de">Praxen</span><h3 data-l="en">The phone rings during every appointment</h3><h3 data-l="de">Das Telefon klingelt in jedem Termin</h3><p data-l="en">Booking, moving and reminding, plus forms that come back half filled in.</p><p data-l="de">Termine vergeben, verschieben, erinnern, und Formulare, die halb ausgefüllt zurückkommen.</p></div>
+      <div class="card spot"><span class="label" data-l="en">Catering and events</span><span class="label" data-l="de">Catering und Events</span><h3 data-l="en">Party enquiries with half the details</h3><h3 data-l="de">Feier-Anfragen mit der Hälfte der Angaben</h3><p data-l="en">Asking for the missing ones, writing quotes, following up. The Christmas enquiries are arriving now.</p><p data-l="de">Nachfragen, Angebote schreiben, nachhalten. Die Weihnachtsanfragen kommen genau jetzt.</p></div>
     </div>
   </div>
 </section>
 
 <!-- WHAT YOU GET -->
-<section class="sec band" id="plan">
+<section class="sec" id="plan">
   <div class="in get">
     <div>
       <div class="sec-head">
@@ -381,7 +599,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- CALCULATOR -->
-<section class="sec" id="calc">
+<section class="sec band" id="calc">
   <div class="in">
     <div class="sec-head">
       <span class="label" data-l="en">Your numbers</span><span class="label" data-l="de">Ihre Zahlen</span>
@@ -409,7 +627,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="sec band" id="how">
+<section class="sec" id="how">
   <div class="in">
     <div class="sec-head">
       <span class="label" data-l="en">How it works</span><span class="label" data-l="de">So läuft es</span>
@@ -417,17 +635,17 @@ footer a { color: inherit; }
       <h2 data-l="de">Von 15 Minuten Gespräch zum ersten Helfer.</h2>
     </div>
     <ol class="steps">
-      <li><span class="when" data-l="en">Day 1 · free</span><span class="when" data-l="de">Tag 1 · kostenlos</span><b data-l="en">15-minute intro</b><b data-l="de">15 Minuten kennenlernen</b><p data-l="en">Phone or video. You tell me where the week goes.</p><p data-l="de">Am Telefon oder per Video. Sie erzählen, wo die Woche hingeht.</p></li>
-      <li><span class="when" data-l="en">Within 24 h · free</span><span class="when" data-l="de">Innerhalb 24 Std. · kostenlos</span><b data-l="en">A first look in writing</b><b data-l="de">Erste Einschätzung, schriftlich</b><p data-l="en">What I heard, where most time probably goes, what the audit would check.</p><p data-l="de">Was ich gehört habe, wo vermutlich die meiste Zeit hängt, was der Zeit-Check prüfen würde.</p></li>
-      <li><span class="when" data-l="en">45 to 60 min · €290</span><span class="when" data-l="de">45 bis 60 Min. · 290 €</span><b data-l="en">The audit call</b><b data-l="de">Das Zeit-Check-Gespräch</b><p data-l="en">You and up to two people. We walk through real cases and write down, step by step, where the time goes.</p><p data-l="de">Sie und bis zu zwei Leute. Wir gehen echte Fälle durch und schreiben Schritt für Schritt auf, wohin die Zeit geht.</p></li>
-      <li><span class="when" data-l="en">3 to 5 working days</span><span class="when" data-l="de">3 bis 5 Werktage</span><b data-l="en">Your plan</b><b data-l="de">Ihr Plan</b><p data-l="en">Two pages. We go through it together in 30 minutes.</p><p data-l="de">Zwei Seiten. Wir gehen ihn in 30 Minuten gemeinsam durch.</p></li>
-      <li><span class="when" data-l="en">Within 14 days of your go</span><span class="when" data-l="de">14 Tage nach Ihrer Freigabe</span><b data-l="en">First helper running</b><b data-l="de">Erster Helfer läuft</b><p data-l="en">Built in your own accounts. Or the first month is free.</p><p data-l="de">In Ihren eigenen Konten eingerichtet. Sonst ist der erste Monat gratis.</p></li>
+      <li class="spot"><span class="when" data-l="en">Day 1 · free</span><span class="when" data-l="de">Tag 1 · kostenlos</span><b data-l="en">15-minute intro</b><b data-l="de">15 Minuten kennenlernen</b><p data-l="en">Phone or video. You tell me where the week goes.</p><p data-l="de">Am Telefon oder per Video. Sie erzählen, wo die Woche hingeht.</p></li>
+      <li class="spot"><span class="when" data-l="en">Within 24 h · free</span><span class="when" data-l="de">Innerhalb 24 Std. · kostenlos</span><b data-l="en">A first look in writing</b><b data-l="de">Erste Einschätzung, schriftlich</b><p data-l="en">What I heard, where most time probably goes, what the audit would check.</p><p data-l="de">Was ich gehört habe, wo vermutlich die meiste Zeit hängt, was der Zeit-Check prüfen würde.</p></li>
+      <li class="spot"><span class="when" data-l="en">45 to 60 min · €290</span><span class="when" data-l="de">45 bis 60 Min. · 290 €</span><b data-l="en">The audit call</b><b data-l="de">Das Zeit-Check-Gespräch</b><p data-l="en">You and up to two people. We walk through real cases and write down, step by step, where the time goes.</p><p data-l="de">Sie und bis zu zwei Leute. Wir gehen echte Fälle durch und schreiben Schritt für Schritt auf, wohin die Zeit geht.</p></li>
+      <li class="spot"><span class="when" data-l="en">3 to 5 working days</span><span class="when" data-l="de">3 bis 5 Werktage</span><b data-l="en">Your plan</b><b data-l="de">Ihr Plan</b><p data-l="en">Two pages. We go through it together in 30 minutes.</p><p data-l="de">Zwei Seiten. Wir gehen ihn in 30 Minuten gemeinsam durch.</p></li>
+      <li class="spot"><span class="when" data-l="en">Within 14 days of your go</span><span class="when" data-l="de">14 Tage nach Ihrer Freigabe</span><b data-l="en">First helper running</b><b data-l="de">Erster Helfer läuft</b><p data-l="en">Built in your own accounts. Or the first month is free.</p><p data-l="de">In Ihren eigenen Konten eingerichtet. Sonst ist der erste Monat gratis.</p></li>
     </ol>
   </div>
 </section>
 
 <!-- PRICES + PROMISE -->
-<section class="sec" id="prices">
+<section class="sec band" id="prices">
   <div class="in">
     <div class="sec-head">
       <span class="label" data-l="en">Prices</span><span class="label" data-l="de">Preise</span>
@@ -435,14 +653,14 @@ footer a { color: inherit; }
       <h2 data-l="de">Zwei Preise, beide offen.</h2>
     </div>
     <div class="prices">
-      <div class="price main">
+      <div class="price main spot">
         <span class="tag" data-l="en">Founding offer · first 3 teams</span><span class="tag" data-l="de">Gründungsangebot · die ersten 3 Betriebe</span>
         <span class="label" data-l="en">Time audit</span><span class="label" data-l="de">Zeit-Check</span>
         <span class="amt">€290 <s>€790</s></span>
         <p data-l="en">One-off. Then €390, later €790. Fully credited against your first month if you continue.</p>
         <p data-l="de">Einmalig. Danach 390 €, später 790 €. Machen Sie weiter, wird der Betrag voll mit dem ersten Monat verrechnet.</p>
       </div>
-      <div class="price">
+      <div class="price spot">
         <span class="tag" data-l="en">Optional</span><span class="tag" data-l="de">Freiwillig</span>
         <span class="label" data-l="en">Monthly help</span><span class="label" data-l="de">Monatliche Begleitung</span>
         <span class="amt"><small data-l="en">from </small><small data-l="de">ab </small>€490<small data-l="en"> /month</small><small data-l="de"> /Monat</small></span>
@@ -463,7 +681,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- PHONE ADD-ON -->
-<section class="sec band" id="phone">
+<section class="sec" id="phone">
   <div class="in phone">
     <div class="sec-head" style="margin-bottom:0">
       <span class="label" data-l="en">Add-on · Hourlo Phone</span><span class="label" data-l="de">Zusatz · Hourlo Telefon</span>
@@ -490,7 +708,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- PRIVACY -->
-<section class="sec" id="privacy">
+<section class="sec band" id="privacy">
   <div class="in">
     <div class="sec-head">
       <span class="label" data-l="en">Your data</span><span class="label" data-l="de">Ihre Daten</span>
@@ -498,16 +716,16 @@ footer a { color: inherit; }
       <h2 data-l="de">Ihre Daten bleiben bei Ihnen.</h2>
     </div>
     <div class="grid2">
-      <div class="card"><h3 data-l="en">The audit needs no logins</h3><h3 data-l="de">Der Zeit-Check braucht keine Zugänge</h3><p data-l="en">We talk through real cases. I don't touch your inbox or systems without your written OK.</p><p data-l="de">Wir sprechen echte Fälle durch. An Ihr Postfach oder Ihre Systeme gehe ich nur mit Ihrem schriftlichen OK.</p></div>
-      <div class="card"><h3 data-l="en">Everything runs in your accounts</h3><h3 data-l="de">Alles läuft in Ihren Konten</h3><p data-l="en">Helpers live in the tools you already pay for. You can switch any of them off yourself, and nothing locks you in.</p><p data-l="de">Die Helfer laufen in den Programmen, die Sie schon haben. Sie können jeden selbst abschalten, nichts bindet Sie.</p></div>
-      <div class="card"><h3 data-l="en">A data processing agreement first</h3><h3 data-l="de">Erst der AV-Vertrag</h3><p data-l="en">Before any helper handles customer data, we sign an agreement under Art. 28 GDPR (AVV).</p><p data-l="de">Bevor ein Helfer Kundendaten verarbeitet, schließen wir einen Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.</p></div>
-      <div class="card"><h3 data-l="en">Nothing goes out without you</h3><h3 data-l="de">Nichts geht ohne Sie raus</h3><p data-l="en">Messages to your customers come to you as drafts until you decide otherwise. I only use AI services whose business terms exclude training on your data.</p><p data-l="de">Nachrichten an Ihre Kunden kommen als Entwurf zu Ihnen, bis Sie etwas anderes festlegen. Ich nutze nur KI-Dienste, deren Geschäftsbedingungen das Training mit Ihren Daten ausschließen.</p></div>
+      <div class="card spot"><h3 data-l="en">The audit needs no logins</h3><h3 data-l="de">Der Zeit-Check braucht keine Zugänge</h3><p data-l="en">We talk through real cases. I don't touch your inbox or systems without your written OK.</p><p data-l="de">Wir sprechen echte Fälle durch. An Ihr Postfach oder Ihre Systeme gehe ich nur mit Ihrem schriftlichen OK.</p></div>
+      <div class="card spot"><h3 data-l="en">Everything runs in your accounts</h3><h3 data-l="de">Alles läuft in Ihren Konten</h3><p data-l="en">Helpers live in the tools you already pay for. You can switch any of them off yourself, and nothing locks you in.</p><p data-l="de">Die Helfer laufen in den Programmen, die Sie schon haben. Sie können jeden selbst abschalten, nichts bindet Sie.</p></div>
+      <div class="card spot"><h3 data-l="en">A data processing agreement first</h3><h3 data-l="de">Erst der AV-Vertrag</h3><p data-l="en">Before any helper handles customer data, we sign an agreement under Art. 28 GDPR (AVV).</p><p data-l="de">Bevor ein Helfer Kundendaten verarbeitet, schließen wir einen Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.</p></div>
+      <div class="card spot"><h3 data-l="en">Nothing goes out without you</h3><h3 data-l="de">Nichts geht ohne Sie raus</h3><p data-l="en">Messages to your customers come to you as drafts until you decide otherwise. I only use AI services whose business terms exclude training on your data.</p><p data-l="de">Nachrichten an Ihre Kunden kommen als Entwurf zu Ihnen, bis Sie etwas anderes festlegen. Ich nutze nur KI-Dienste, deren Geschäftsbedingungen das Training mit Ihren Daten ausschließen.</p></div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
-<section class="sec band" id="about">
+<section class="sec" id="about">
   <div class="in about">
     <img src="/img/anton.jpg" width="640" height="800" alt="Anton Küppers" loading="lazy">
     <div class="txt">
@@ -526,7 +744,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- FAQ -->
-<section class="sec" id="faq">
+<section class="sec band" id="faq">
   <div class="in">
     <div class="sec-head">
       <span class="label">FAQ</span>
@@ -546,7 +764,7 @@ footer a { color: inherit; }
 </section>
 
 <!-- BOOK -->
-<section class="sec" id="book" style="padding-top:0">
+<section class="sec band" id="book" style="padding-top:0">
   <div class="in">
     <div class="book">
       <div>
@@ -602,7 +820,7 @@ footer a { color: inherit; }
     { en: 'Thu', de: 'Do', cells: 'xhhhhx' },
     { en: 'Fri', de: 'Fr', cells: 'hhxh' }
   ];
-  var days = document.getElementById('days');
+  var days = document.getElementById('days'), lit = 0;
   week.forEach(function (d) {
     var row = document.createElement('div'); row.className = 'day';
     row.innerHTML = '<span><span data-l="en">' + d.en + '</span><span data-l="de">' + d.de + '</span></span>';
@@ -611,6 +829,7 @@ footer a { color: inherit; }
       var c = document.createElement('span');
       var t = d.cells.charAt(i);
       c.className = 'cell' + (t === 'h' ? ' h' : t === '' ? ' empty' : '');
+      if (t === 'h') c.style.transitionDelay = (lit++ * 45) + 'ms'; // helpers take over one block at a time
       cells.appendChild(c);
     }
     row.appendChild(cells); days.appendChild(row);
@@ -624,16 +843,30 @@ footer a { color: inherit; }
   wb.addEventListener('click', function () { setWeek(false); });
   wa.addEventListener('click', function () { setWeek(true); });
 
-  // Calculator
+  // Calculator: the two results roll to their new value like a counter
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var cp = document.getElementById('c-people'), ch = document.getElementById('c-hours'), cr = document.getElementById('c-rate');
+  var shown = { h: null, e: null }, rollId = 0;
+  function roll(h, e) {
+    var oh = document.getElementById('o-yhours'), oe = document.getElementById('o-euro');
+    var h0 = shown.h === null ? h : shown.h, e0 = shown.e === null ? e : shown.e, id = ++rollId, t0 = null;
+    function draw(k) { shown.h = h0 + (h - h0) * k; shown.e = e0 + (e - e0) * k; oh.textContent = num(Math.round(shown.h)); oe.textContent = euro(Math.round(shown.e)); }
+    if (reduce || (h0 === h && e0 === e)) { draw(1); return; }
+    requestAnimationFrame(function step(t) {
+      if (id !== rollId) return;
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0) / 450, 1);
+      draw(1 - Math.pow(1 - p, 3));
+      if (p < 1) requestAnimationFrame(step);
+    });
+  }
   function fmtCalc() {
     if (!cp) return;
     var h = cp.value * ch.value * 46;
     document.getElementById('o-people').textContent = cp.value;
     document.getElementById('o-hours').textContent = ch.value;
     document.getElementById('o-rate').textContent = euro(+cr.value);
-    document.getElementById('o-yhours').textContent = num(h);
-    document.getElementById('o-euro').textContent = euro(h * cr.value);
+    roll(h, h * cr.value);
     var wk = Math.max(1, Math.ceil(290 / (cp.value * ch.value * cr.value / 3)));
     document.getElementById('o-pay-en').textContent = wk + (wk === 1 ? ' week' : ' weeks');
     document.getElementById('o-pay-de').textContent = wk + (wk === 1 ? ' Woche' : ' Wochen');
@@ -644,19 +877,94 @@ footer a { color: inherit; }
   }
   [cp, ch, cr].forEach(function (el) { el.addEventListener('input', fmtCalc); });
 
+  // Hero headline: each word fades in (CSS does the motion)
+  document.querySelectorAll('.hero h1').forEach(function (h) {
+    h.innerHTML = h.textContent.split(' ').map(function (w, i) { return '<span class="w" style="--i:' + i + '">' + w + '</span>'; }).join(' ');
+  });
+
+  // Ticker: a second copy of the list makes the loop seamless
+  var tk = document.getElementById('tk-track'), g2 = tk.firstElementChild.cloneNode(true);
+  g2.setAttribute('aria-hidden', 'true'); tk.appendChild(g2);
+
   setLang((navigator.language || '').slice(0, 2) === 'de' ? 'de' : 'en');
 
-  // Hero: the hour figures count up once
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    var els = document.querySelectorAll('.count'), t0 = null;
-    function step(t) {
-      if (!t0) t0 = t;
-      var p = Math.min((t - t0) / 900, 1), e = 1 - Math.pow(1 - p, 3);
-      els.forEach(function (el) { el.textContent = num(+el.getAttribute('data-to') * e, 1); });
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+  // Hero card: a scan passes over the plan, each task appears with its hours, the total counts up
+  var scan = document.getElementById('scan'), status = document.getElementById('scan-status');
+  var rows = scan.querySelectorAll('.row'), totEl = scan.querySelector('.tot .count');
+  var lines = {
+    en: ['walking through real cases…', 'counting minutes per task…', 'turning hours into euros…'],
+    de: ['echte Fälle durchgehen…', 'Minuten pro Aufgabe zählen…', 'Stunden in Euro umrechnen…']
+  };
+  function doneLine() { return root.lang === 'de' ? num(13.5, 1) + ' Std. pro Woche gefunden' : num(13.5, 1) + ' h a week found'; }
+  var scanDone = false;
+  function tween(ms, fn) {
+    return new Promise(function (res) {
+      var t0 = null;
+      requestAnimationFrame(function step(t) {
+        if (!t0) t0 = t;
+        if (scanDone) return res();
+        var p = Math.min((t - t0) / ms, 1);
+        fn(1 - Math.pow(1 - p, 3));
+        if (p < 1) requestAnimationFrame(step); else res();
+      });
+    });
   }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function runScan() {
+    scan.classList.add('pending', 'scanning');
+    scanDone = false;
+    rows.forEach(function (r) { var c = r.querySelector('.count'); if (c) c.textContent = num(0, 1); });
+    totEl.textContent = num(0, 1);
+    var sum = 0;
+    for (var i = 0; i < rows.length; i++) {
+      status.textContent = lines[root.lang][i];
+      await wait(600);
+      rows[i].classList.add('on');
+      let c = rows[i].querySelector('.count'), v = +c.getAttribute('data-to'), base = sum;
+      tween(650, function (k) { c.textContent = num(v * k, 1); totEl.textContent = num(base + v * k, 1); });
+      sum += v;
+      await wait(350);
+    }
+    await wait(450);
+    rows.forEach(function (r) { var c = r.querySelector('.count'); if (c) c.textContent = num(+c.getAttribute('data-to'), 1); });
+    scanDone = true;
+    totEl.textContent = num(13.5, 1);
+    scan.classList.remove('pending', 'scanning');
+    status.textContent = doneLine();
+  }
+  status.textContent = doneLine();
+  document.getElementById('l-en').addEventListener('click', function () { if (!scan.classList.contains('pending')) status.textContent = doneLine(); });
+  document.getElementById('l-de').addEventListener('click', function () { if (!scan.classList.contains('pending')) status.textContent = doneLine(); });
+  if (!reduce) setTimeout(runScan, 700);
+
+  // Live Berlin time in the top bar
+  var clock = document.getElementById('clock');
+  function tick() {
+    try {
+      var p = new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' }).format(new Date()).split(':');
+      clock.innerHTML = p[0] + '<span class="colon">:</span>' + p[1] + ' · Berlin';
+    } catch (e) { clock.hidden = true; }
+  }
+  tick(); setInterval(tick, 15000);
+
+  // Sections below the first screen glide in as they arrive. Everything is visible without this.
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('main > .sec > .in').forEach(function (el) {
+      if (el.getBoundingClientRect().top > window.innerHeight) { el.classList.add('rv'); io.observe(el); }
+    });
+  }
+
+  // Cards glow softly where the pointer is
+  document.querySelectorAll('.spot').forEach(function (el) {
+    el.addEventListener('pointermove', function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 
   // Copy buttons
   document.querySelectorAll('.copy').forEach(function (b) {
